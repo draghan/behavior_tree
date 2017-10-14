@@ -20,7 +20,7 @@ public:
 
     virtual void print(std::ostream& stream)
     {
-        stream << "BehaviorAction [" << id << "]\n";
+        stream << "[ ]\tid = " << id << '\n';
     }
 
 protected:

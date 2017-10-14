@@ -13,7 +13,7 @@ class BehaviorCondition :public IBehavior
 public:
     virtual void print(std::ostream& stream)
     {
-        stream << "BehaviorCondition [" << id << "]\n";
+        stream << "( )\tid = " << id << '\n';
     }
 
     using predicate_t = std::function<bool()>;

@@ -21,7 +21,7 @@ public:
 
     virtual void print(std::ostream& stream)
     {
-        stream << "BehaviorEmpty [" << id << "]\n";
+        stream << ".\tid = " << id << '\n';
     }
 
 protected:
