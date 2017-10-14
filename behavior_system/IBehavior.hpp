@@ -56,7 +56,7 @@ public:
         return children[index];
     }
 
-    ptr get_last_child() const // todo: unify behavior of get_child and operator[] (or get rid of one of them)
+    ptr get_last_child() const
     {
         if(children.empty())
         {
@@ -89,10 +89,7 @@ public:
             : children{}, id{id}, status{BehaviorState::undefined}
     {}
 
-    virtual ~IBehavior()
-    {
-        std::cout << "Destructor of IBehavior [" << id << "]\n";
-    }
+    virtual ~IBehavior() = default;
 
     BehaviorState evaluate()
     {
@@ -119,7 +116,6 @@ protected:
     std::vector<ptr> children;
     uint32_t id;
     BehaviorState status;
-
 
     virtual BehaviorState internal_evaluate() = 0;
 };
