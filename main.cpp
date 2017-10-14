@@ -6,6 +6,10 @@
 
 int main()
 {
+    char character{'c'};
+    std::string s{character};
+    s += character;
+    std::cout << s << std::endl;
     std::vector<IBehavior::ptr> behaviors;
     behaviors.push_back(new BehaviorEmpty{11});
     behaviors.push_back(new BehaviorEmpty{12});

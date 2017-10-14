@@ -10,7 +10,7 @@ class BehaviorSequence :public IBehavior
 {
 public:
 
-    BehaviorSequence(uint32_t id)
+    explicit BehaviorSequence(uint32_t id)
             : IBehavior{id}
     {
     }

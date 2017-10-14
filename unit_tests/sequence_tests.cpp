@@ -8,6 +8,38 @@
 
 TEST_CASE("Testing BehaviorSequence class", "[Sequence]")
 {
+    struct eval_result
+    {
+        int failure;
+        int running;
+        int success;
+        BehaviorState xstate;
+    };
+    int counter_failure = 0;
+    int counter_success = 0;
+    int counter_running = 0;
+    auto zero_counters = [&]()
+    {
+        counter_failure = counter_running = counter_success = 0;
+    };
+    BehaviorAction fail{1, [&]()
+    {
+        ++counter_failure;
+        return BehaviorState::failure;
+    }};
+
+    BehaviorAction success{2, [&]()
+    {
+        ++counter_success;
+        return BehaviorState::success;
+    }};
+
+    BehaviorAction running{3, [&]()
+    {
+        ++counter_running;
+        return BehaviorState::running;
+    }};
+
     SECTION("Testing empty sequence")
     {
         BehaviorSequence sequence{0};
@@ -15,85 +47,254 @@ TEST_CASE("Testing BehaviorSequence class", "[Sequence]")
         REQUIRE(sequence.evaluate() == BehaviorState::undefined);
     }
 
-    SECTION("Testing with {success, success} children")
+    SECTION("Testing every 2 elements' combination of from {fail, running, success}")
     {
-        int counter = 0;
-        BehaviorAction always_success{1, [&]()
+        SECTION("Testing with {run, run} children")
         {
-            ++counter;
-            return BehaviorState::success;
-        }};
+            zero_counters();
+            eval_result e1, e2;
+            e1.failure = 0;
+            e1.running = 1;
+            e1.success = 0;
+            e1.xstate = BehaviorState::running;
 
-        BehaviorSequence sequence{0};
-        REQUIRE(sequence.add_child(&always_success) == true);
-        REQUIRE(sequence.add_child(&always_success) == true);
-        REQUIRE(sequence.get_number_of_children() == 2);
-        REQUIRE(sequence.evaluate() == BehaviorState::success);
-        REQUIRE(counter == 2);
-    }
+            e2 = e1;
+            e2.running++;
 
-    SECTION("Testing with {running} children")
-    {
-        int counter = 0;
-        BehaviorAction always_running{1, [&]()
+            BehaviorSequence sequence{0};
+            REQUIRE(sequence.add_child(&running) == true);
+            REQUIRE(sequence.add_child(&running) == true);
+            REQUIRE(sequence.get_number_of_children() == 2);
+
+            REQUIRE(sequence.evaluate() == e1.xstate);
+            REQUIRE(counter_failure == e1.failure);
+            REQUIRE(counter_running == e1.running);
+            REQUIRE(counter_success == e1.success);
+
+            REQUIRE(sequence.evaluate() == e2.xstate);
+            REQUIRE(counter_failure == e2.failure);
+            REQUIRE(counter_running == e2.running);
+            REQUIRE(counter_success == e2.success);
+        }
+        SECTION("Testing with {run, success} children")
         {
-            ++counter;
-            return BehaviorState::running;
-        }};
+            zero_counters();
+            eval_result e1, e2;
+            e1.failure = 0;
+            e1.running = 1;
+            e1.success = 0;
+            e1.xstate = BehaviorState::running;
 
-        BehaviorSequence sequence{0};
-        REQUIRE(sequence.add_child(&always_running) == true);
-        REQUIRE(sequence.get_number_of_children() == 1);
-        REQUIRE(sequence.evaluate() == BehaviorState::running);
-        REQUIRE(counter == 1);
-        REQUIRE(sequence.evaluate() == BehaviorState::running);
-        REQUIRE(counter == 2);
-    }
+            e2 = e1;
+            e2.running++;
 
-    SECTION("Testing with {success, fail} children")
-    {
-        int counter = 0;
-        BehaviorAction always_success{1, [&]()
+
+            BehaviorSequence sequence{0};
+            REQUIRE(sequence.add_child(&running) == true);
+            REQUIRE(sequence.add_child(&success) == true);
+            REQUIRE(sequence.get_number_of_children() == 2);
+
+            REQUIRE(sequence.evaluate() == e1.xstate);
+            REQUIRE(counter_failure == e1.failure);
+            REQUIRE(counter_running == e1.running);
+            REQUIRE(counter_success == e1.success);
+
+            REQUIRE(sequence.evaluate() == e2.xstate);
+            REQUIRE(counter_failure == e2.failure);
+            REQUIRE(counter_running == e2.running);
+            REQUIRE(counter_success == e2.success);
+        }
+        SECTION("Testing with {run, fail} children")
         {
-            ++counter;
-            return BehaviorState::success;
-        }};
+            zero_counters();
+            eval_result e1, e2;
+            e1.failure = 0;
+            e1.running = 1;
+            e1.success = 0;
+            e1.xstate = BehaviorState::running;
 
-        BehaviorAction always_fail{2, [&]()
+            e2 = e1;
+            e2.running++;
+
+            BehaviorSequence sequence{0};
+            REQUIRE(sequence.add_child(&running) == true);
+            REQUIRE(sequence.add_child(&fail) == true);
+            REQUIRE(sequence.get_number_of_children() == 2);
+
+            REQUIRE(sequence.evaluate() == e1.xstate);
+            REQUIRE(counter_failure == e1.failure);
+            REQUIRE(counter_running == e1.running);
+            REQUIRE(counter_success == e1.success);
+
+            REQUIRE(sequence.evaluate() == e2.xstate);
+            REQUIRE(counter_failure == e2.failure);
+            REQUIRE(counter_running == e2.running);
+            REQUIRE(counter_success == e2.success);
+        }
+        SECTION("Testing with {success, run} children")
         {
-            ++counter;
-            return BehaviorState::failure;
-        }};
+            zero_counters();
+            eval_result e1, e2;
+            e1.failure = 0;
+            e1.running = 1;
+            e1.success = 1;
+            e1.xstate = BehaviorState::running;
 
-        BehaviorSequence sequence{0};
-        REQUIRE(sequence.add_child(&always_success) == true);
-        REQUIRE(sequence.add_child(&always_fail) == true);
-        REQUIRE(sequence.get_number_of_children() == 2);
-        REQUIRE(sequence.evaluate() == BehaviorState::failure);
-        REQUIRE(counter == 2);
-    }
+            e2 = e1;
+            e2.success++;
+            e2.running++;
 
-    SECTION("Testing with {fail, success} children")
-    {
-        int counter = 0;
-        BehaviorAction always_success{1, [&]()
+            BehaviorSequence sequence{0};
+            REQUIRE(sequence.add_child(&success) == true);
+            REQUIRE(sequence.add_child(&running) == true);
+            REQUIRE(sequence.get_number_of_children() == 2);
+
+            REQUIRE(sequence.evaluate() == e1.xstate);
+            REQUIRE(counter_failure == e1.failure);
+            REQUIRE(counter_running == e1.running);
+            REQUIRE(counter_success == e1.success);
+
+            REQUIRE(sequence.evaluate() == e2.xstate);
+            REQUIRE(counter_failure == e2.failure);
+            REQUIRE(counter_running == e2.running);
+            REQUIRE(counter_success == e2.success);
+        }
+        SECTION("Testing with {success, success} children")
         {
-            ++counter;
-            return BehaviorState::success;
-        }};
+            zero_counters();
+            eval_result e1, e2;
+            e1.failure = 0;
+            e1.running = 0;
+            e1.success = 2;
+            e1.xstate = BehaviorState::success;
 
-        BehaviorAction always_fail{2, [&]()
+            e2 = e1;
+            e2.success += 2;
+
+            BehaviorSequence sequence{0};
+            REQUIRE(sequence.add_child(&success) == true);
+            REQUIRE(sequence.add_child(&success) == true);
+            REQUIRE(sequence.get_number_of_children() == 2);
+
+            REQUIRE(sequence.evaluate() == e1.xstate);
+            REQUIRE(counter_failure == e1.failure);
+            REQUIRE(counter_running == e1.running);
+            REQUIRE(counter_success == e1.success);
+
+            REQUIRE(sequence.evaluate() == e2.xstate);
+            REQUIRE(counter_failure == e2.failure);
+            REQUIRE(counter_running == e2.running);
+            REQUIRE(counter_success == e2.success);
+        }
+        SECTION("Testing with {success, fail} children")
         {
-            ++counter;
-            return BehaviorState::failure;
-        }};
+            zero_counters();
+            eval_result e1, e2;
+            e1.failure = 1;
+            e1.running = 0;
+            e1.success = 1;
+            e1.xstate = BehaviorState::failure;
 
-        BehaviorSequence sequence{0};
-        REQUIRE(sequence.add_child(&always_fail) == true);
-        REQUIRE(sequence.add_child(&always_success) == true);
-        REQUIRE(sequence.get_number_of_children() == 2);
-        REQUIRE(sequence.evaluate() == BehaviorState::failure);
-        REQUIRE(counter == 1);
+            e2 = e1;
+            e2.failure++;
+            e2.success++;
+
+            BehaviorSequence sequence{0};
+            REQUIRE(sequence.add_child(&success) == true);
+            REQUIRE(sequence.add_child(&fail) == true);
+            REQUIRE(sequence.get_number_of_children() == 2);
+
+            REQUIRE(sequence.evaluate() == e1.xstate);
+            REQUIRE(counter_failure == e1.failure);
+            REQUIRE(counter_running == e1.running);
+            REQUIRE(counter_success == e1.success);
+
+            REQUIRE(sequence.evaluate() == e2.xstate);
+            REQUIRE(counter_failure == e2.failure);
+            REQUIRE(counter_running == e2.running);
+            REQUIRE(counter_success == e2.success);
+        }
+        SECTION("Testing with {fail, run} children")
+        {
+            zero_counters();
+            eval_result e1, e2;
+            e1.failure = 1;
+            e1.running = 0;
+            e1.success = 0;
+            e1.xstate = BehaviorState::failure;
+
+            e2 = e1;
+            e2.failure++;
+
+            BehaviorSequence sequence{0};
+            REQUIRE(sequence.add_child(&fail) == true);
+            REQUIRE(sequence.add_child(&running) == true);
+            REQUIRE(sequence.get_number_of_children() == 2);
+
+            REQUIRE(sequence.evaluate() == e1.xstate);
+            REQUIRE(counter_failure == e1.failure);
+            REQUIRE(counter_running == e1.running);
+            REQUIRE(counter_success == e1.success);
+
+            REQUIRE(sequence.evaluate() == e2.xstate);
+            REQUIRE(counter_failure == e2.failure);
+            REQUIRE(counter_running == e2.running);
+            REQUIRE(counter_success == e2.success);
+        }
+        SECTION("Testing with {fail, success} children")
+        {
+            zero_counters();
+            eval_result e1, e2;
+            e1.failure = 1;
+            e1.running = 0;
+            e1.success = 0;
+            e1.xstate = BehaviorState::failure;
+
+            e2 = e1;
+            e2.failure++;
+
+            BehaviorSequence sequence{0};
+            REQUIRE(sequence.add_child(&fail) == true);
+            REQUIRE(sequence.add_child(&success) == true);
+            REQUIRE(sequence.get_number_of_children() == 2);
+
+            REQUIRE(sequence.evaluate() == e1.xstate);
+            REQUIRE(counter_failure == e1.failure);
+            REQUIRE(counter_running == e1.running);
+            REQUIRE(counter_success == e1.success);
+
+            REQUIRE(sequence.evaluate() == e2.xstate);
+            REQUIRE(counter_failure == e2.failure);
+            REQUIRE(counter_running == e2.running);
+            REQUIRE(counter_success == e2.success);
+        }
+        SECTION("Testing with {fail, fail} children")
+        {
+            zero_counters();
+            eval_result e1, e2;
+            e1.failure = 1;
+            e1.running = 0;
+            e1.success = 0;
+            e1.xstate = BehaviorState::failure;
+
+            e2 = e1;
+            e2.failure++;
+
+            BehaviorSequence sequence{0};
+            REQUIRE(sequence.add_child(&fail) == true);
+            REQUIRE(sequence.add_child(&fail) == true);
+            REQUIRE(sequence.get_number_of_children() == 2);
+
+            REQUIRE(sequence.evaluate() == e1.xstate);
+            REQUIRE(counter_failure == e1.failure);
+            REQUIRE(counter_running == e1.running);
+            REQUIRE(counter_success == e1.success);
+
+            REQUIRE(sequence.evaluate() == e2.xstate);
+            REQUIRE(counter_failure == e2.failure);
+            REQUIRE(counter_running == e2.running);
+            REQUIRE(counter_success == e2.success);
+        }
     }
 
     SECTION("Testing with {success, fail/success} children")
