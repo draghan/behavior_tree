@@ -6,7 +6,7 @@
 
 int main()
 {
-
+    std::cout << "Hello, world!";
 }
 
 #undef REQUIRE
