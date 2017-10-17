@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include "../IBehavior.hpp"
 
 class BehaviorTree
@@ -79,21 +80,63 @@ public:
     bool set_at_relatively(const Args &... args)
     {
         operation_correct = true;
-
+        std::initializer_list<int>{(go_to_node_relatively(args), 0)...};
         return operation_correct;
     }
 
-    bool set_at_relatively();
+    bool set_at_relatively()
+    {
+        return true;
+    }
 
     template<typename... Args>
-    bool set_at_absolutely(const Args &... args);
-    bool set_at_id();
+    bool set_at_absolutely(const Args &... args)
+    {
+        back_to_root();
+        return set_at_relatively(args...);
+    }
 
-    IBehavior::ptr get();
+    bool set_at_absolutely()
+    {
+        back_to_root();
+        return true;
+    }
 
-    void add_child(IBehavior::ptr);
+    bool set_at_id(id_t wanted_id)
+    {
+        auto found = std::find_if(nodes.begin(), nodes.end(), [&](auto &node) {
+            return (*node)->get_id() == wanted_id;
+        });
 
-    void print(std::ostream& stream);
+        if (found == nodes.end())
+        {
+            return false;
+        } else
+        {
+            active = *found;
+            return true;
+        }
+    }
+
+    IBehavior::ptr get()
+    {
+        return active;
+    }
+
+    void add_child(IBehavior::ptr &&child)
+    {
+        nodes.emplace_back(child);
+        auto added_node = get_last_node();
+        added_node->set_id(last_id);
+        ++last_id;
+        active->add_child(added_node);
+    }
+
+    void print(std::ostream &stream)
+    {
+        bool root_is_lonely{root->get_number_of_children() == 0};
+        root->PrintPretty("", root_is_lonely, stream);
+    }
 
 private:
     std::vector<IBehavior::ptr> nodes;
@@ -116,7 +159,6 @@ private:
             operation_correct = false;
         } else
         {
-            operation_correct = true;
             active = temp;
         }
     }
