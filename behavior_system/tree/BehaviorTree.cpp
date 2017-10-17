@@ -3,3 +3,5 @@
 //
 
 #include "BehaviorTree.hpp"
+
+const BehaviorTree::id_t BehaviorTree::undefined_id{std::numeric_limits<BehaviorTree::id_t>::max()};

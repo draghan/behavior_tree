@@ -5,12 +5,14 @@
 #pragma once
 
 #include <algorithm>
+#include <limits>
 #include "../IBehavior.hpp"
 
 class BehaviorTree
 {
 public:
     using id_t = uint32_t;
+    const static id_t undefined_id;
 
     BehaviorTree(IBehavior::ptr root)
             : nodes{1, root},
@@ -34,6 +36,7 @@ public:
     {
         bt.root = nullptr;
         bt.active = nullptr;
+        bt.last_id = 0;
     }
 
     BehaviorTree &operator=(const BehaviorTree &bt) = delete;
@@ -79,6 +82,12 @@ public:
     template<typename... Args>
     bool set_at_relatively(const Args &... args)
     {
+        if (active == nullptr)
+        {
+            operation_correct = false;
+            return false;
+        }
+
         operation_correct = true;
         std::initializer_list<int>{(go_to_node_relatively(args), 0)...};
         return operation_correct;
@@ -86,7 +95,13 @@ public:
 
     bool set_at_relatively()
     {
-        return true;
+        if (active == nullptr)
+        {
+            return false;
+        } else
+        {
+            return true;
+        }
     }
 
     template<typename... Args>
@@ -99,13 +114,19 @@ public:
     bool set_at_absolutely()
     {
         back_to_root();
-        return true;
+        if (active == nullptr)
+        {
+            return false;
+        } else
+        {
+            return true;
+        }
     }
 
     bool set_at_id(id_t wanted_id)
     {
         auto found = std::find_if(nodes.begin(), nodes.end(), [&](auto &node) {
-            return (*node)->get_id() == wanted_id;
+            return node->get_id() == wanted_id;
         });
 
         if (found == nodes.end())
@@ -123,6 +144,20 @@ public:
         return active;
     }
 
+    id_t get_id() const
+    {
+        if (active == nullptr)
+        {
+            return undefined_id;
+        }
+        return active->get_id();
+    }
+
+    id_t get_node_count() const
+    {
+        return nodes.size();
+    }
+
     void add_child(IBehavior::ptr &&child)
     {
         nodes.emplace_back(child);
@@ -136,6 +171,17 @@ public:
     {
         bool root_is_lonely{root->get_number_of_children() == 0};
         root->PrintPretty("", root_is_lonely, stream);
+    }
+
+    BehaviorState evaluate()
+    {
+        if (active == nullptr)
+        {
+            return BehaviorState::undefined;
+        } else
+        {
+            return active->evaluate();
+        }
     }
 
 private:
@@ -152,6 +198,12 @@ private:
 
     void go_to_node_relatively(size_t x)
     {
+        if (active == nullptr)
+        {
+            operation_correct = false;
+            return;
+        }
+
         auto temp = active->get_child(x);
 
         if (temp == nullptr)
