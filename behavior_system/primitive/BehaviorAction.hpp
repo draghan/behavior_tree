@@ -11,6 +11,11 @@
 class BehaviorAction :public IBehavior
 {
 public:
+    bool can_have_children() override
+    {
+        return false;
+    }
+
     using action_t = std::function<BehaviorState()>;
 
     BehaviorAction(uint32_t id, action_t action) :

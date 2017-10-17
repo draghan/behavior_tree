@@ -24,6 +24,11 @@ public:
         stream << ".\tid = " << id << '\n';
     }
 
+    bool can_have_children() override
+    {
+        return false;
+    }
+
 protected:
     BehaviorState internal_evaluate() override
     {

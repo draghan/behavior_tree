@@ -11,6 +11,11 @@
 class BehaviorCondition :public IBehavior
 {
 public:
+    bool can_have_children() override
+    {
+        return false;
+    }
+
     virtual void print(std::ostream& stream)
     {
         stream << "( )\tid = " << id << '\n';

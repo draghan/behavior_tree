@@ -14,6 +14,12 @@ TEST_CASE("Testing BehaviorCondition class", "[Condition]")
         REQUIRE(condition_always_true.get_id() == 0);
         REQUIRE(condition_always_true.evaluate() == BehaviorState::success);
         REQUIRE(condition_always_true.evaluate() == BehaviorState::success);
+        SECTION("Tests for trying to add children")
+        {
+            REQUIRE(condition_always_true.can_have_children() == false);
+            REQUIRE(condition_always_true.add_child(new BehaviorCondition(0, []() { return true; })) == false);
+            REQUIRE(condition_always_true.get_number_of_children() == 0);
+        }
     }
     SECTION("Always false")
     {

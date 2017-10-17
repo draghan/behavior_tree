@@ -9,6 +9,10 @@
 class BehaviorSequence :public IBehavior
 {
 public:
+    bool can_have_children() override
+    {
+        return true;
+    }
 
     explicit BehaviorSequence(uint32_t id)
             : IBehavior{id}

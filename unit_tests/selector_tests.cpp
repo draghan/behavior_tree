@@ -94,6 +94,7 @@ TEST_CASE("Testing BehaviorSelector class", "[Selector]")
         BehaviorSelector selector{0};
         REQUIRE(selector.get_status() == BehaviorState::undefined);
         REQUIRE(selector.evaluate() == BehaviorState::undefined);
+        REQUIRE(selector.can_have_children() == true);
     }
 
     SECTION("Testing every 2 elements' combination of from {fail, running, success}")

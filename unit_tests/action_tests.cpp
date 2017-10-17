@@ -18,6 +18,12 @@ TEST_CASE("Testing BehaviorAction class", "[Action]")
         REQUIRE(root.get_number_of_children() == 0);
         REQUIRE(root.get_child(0) == nullptr);
         REQUIRE(root.evaluate() == BehaviorState::success);
+        SECTION("Tests for trying to add children")
+        {
+            REQUIRE(root.can_have_children() == false);
+            REQUIRE(root.add_child(new BehaviorAction(0, []() { return BehaviorState::running; })) == false);
+            REQUIRE(root.get_number_of_children() == 0);
+        }
     }
 
     SECTION("Testing managing of captured objects in action()")

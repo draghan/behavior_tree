@@ -90,6 +90,7 @@ TEST_CASE("Testing BehaviorSequence class", "[Sequence]")
 
 
             BehaviorSequence sequence{0};
+            REQUIRE(sequence.can_have_children() == true);
             REQUIRE(sequence.add_child(&running) == true);
             REQUIRE(sequence.add_child(&success) == true);
             REQUIRE(sequence.get_number_of_children() == 2);

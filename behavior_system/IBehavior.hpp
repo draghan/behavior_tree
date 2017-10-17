@@ -34,10 +34,11 @@ public:
 
     auto add_child(ptr child)
     {
-        if(child == this)
+        if (!can_have_children() || child == this)
         {
             return false;
         }
+
         children.push_back(child);
         return true;
     }
@@ -112,6 +113,7 @@ public:
         stream << "IBehavior [" << id << "]\n";
     }
 
+    virtual bool can_have_children() = 0;
 protected:
     std::vector<ptr> children;
     uint32_t id;
