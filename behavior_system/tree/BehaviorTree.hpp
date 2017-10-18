@@ -7,6 +7,10 @@
 #include <algorithm>
 #include <limits>
 #include "../IBehavior.hpp"
+#include "../composite/BehaviorSelector.hpp"
+#include "../composite/BehaviorSequence.hpp"
+#include "../primitive/BehaviorAction.hpp"
+#include "../primitive/BehaviorCondition.hpp"
 
 class BehaviorTree
 {
@@ -23,6 +27,15 @@ public:
     {
         root->set_id(last_id);
         ++last_id;
+    }
+
+    BehaviorTree()
+            : nodes{},
+              root{nullptr},
+              active{nullptr},
+              last_id{0},
+              operation_correct{true}
+    {
     }
 
     BehaviorTree(const BehaviorTree &) = delete;
@@ -158,14 +171,51 @@ public:
         return nodes.size();
     }
 
-    void add_child(IBehavior::ptr &&child)
+    bool add_child(IBehavior::ptr &&child)
     {
-        nodes.emplace_back(child);
+        try
+        {
+            nodes.emplace_back(child);
+        }
+        catch (...)
+        {
+            return false;
+        }
+        if (nodes.size() == 1)
+        {
+            root = nodes[0];
+            active = root;
+        }
         auto added_node = get_last_node();
+        if (added_node == nullptr)
+        {
+            return false;
+        }
         added_node->set_id(last_id);
         ++last_id;
-        active->add_child(added_node);
+        return active->add_child(added_node);
     }
+
+    bool add_sequence()
+    {
+        return add_child(new BehaviorSequence(id_any));
+    }
+
+    bool add_selector()
+    {
+        return add_child(new BehaviorSelector(id_any));
+    }
+
+    bool add_action(BehaviorAction::action_t &&action)
+    {
+        return add_child(new BehaviorAction(id_any, std::move(action)));
+    }
+
+    bool add_condition(BehaviorCondition::predicate_t &&predicate)
+    {
+        return add_child(new BehaviorCondition(id_any, std::move(predicate)));
+    }
+
 
     void print(std::ostream &stream)
     {
@@ -185,6 +235,7 @@ public:
     }
 
 private:
+    static const id_t id_any;
     std::vector<IBehavior::ptr> nodes;
     IBehavior::ptr root;
     IBehavior::ptr active;
@@ -193,7 +244,13 @@ private:
 
     IBehavior::ptr get_last_node()
     {
-        return *(nodes.end() - 1);
+        if (nodes.size() > 0)
+        {
+            return *(nodes.end() - 1);
+        } else
+        {
+            return nullptr;
+        }
     }
 
     void go_to_node_relatively(size_t x)

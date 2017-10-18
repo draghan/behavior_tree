@@ -330,3 +330,54 @@ TEST_CASE("Testing \'behavior part\' interface of BehaviorTree class", "[Tree]")
         REQUIRE(action_count == 5);
     }
 }
+
+TEST_CASE("Testing factor part of BehaviorTree class", "[Tree]")
+{
+    SECTION("Adding one copy of each behavior node")
+    {
+        BehaviorTree tree;
+        REQUIRE(tree.set_at_absolutely() == false);
+        REQUIRE(tree.get_id() == BehaviorTree::undefined_id);
+        REQUIRE(tree.get_node_count() == 0);
+        REQUIRE(tree.get() == nullptr);
+
+        tree.add_selector();
+        REQUIRE(tree.get_id() == 0);
+        REQUIRE(tree.get_node_count() == 1);
+        REQUIRE(dynamic_cast<BehaviorSelector *>(tree.get()) != nullptr);
+
+        tree.add_sequence();
+        REQUIRE(tree.get_id() == 0);
+        REQUIRE(tree.get_node_count() == 2);
+        REQUIRE(dynamic_cast<BehaviorSelector *>(tree.get()) != nullptr);
+        REQUIRE(tree.set_at_relatively(0) == true);
+        REQUIRE(tree.get_id() == 1);
+        REQUIRE(dynamic_cast<BehaviorSequence *>(tree.get()) != nullptr);
+        REQUIRE(tree.set_at_absolutely(1) == false);
+
+        REQUIRE(tree.set_at_absolutely(0) == true);
+        REQUIRE(tree.add_condition([]() {
+            return true;
+        }));
+        int action_counter = 0;
+        REQUIRE(tree.add_action([&]() {
+            ++action_counter;
+            return BehaviorState::success;
+        }));
+        REQUIRE(tree.get_node_count() == 4);
+
+        REQUIRE(tree.set_at_absolutely(0, 0));
+        REQUIRE(tree.get_id() == 2);
+        REQUIRE(dynamic_cast<BehaviorCondition *>(tree.get()) != nullptr);
+
+        REQUIRE(tree.set_at_absolutely(0, 1));
+        REQUIRE(tree.get_id() == 3);
+        REQUIRE(dynamic_cast<BehaviorAction *>(tree.get()) != nullptr);
+
+        REQUIRE(tree.set_at_absolutely(0, 2) == false);
+
+        REQUIRE(tree.set_at_absolutely());
+        REQUIRE(tree.evaluate() == BehaviorState::success);
+        REQUIRE(action_counter == 1);
+    }
+}

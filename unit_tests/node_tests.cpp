@@ -30,8 +30,8 @@ TEST_CASE("Testing typical node of tree interface - BehaviorEmpty class", "[Beha
         BehaviorEmpty child_1{1};
         BehaviorEmpty child_2{2};
 
-        root.add_child(&child_1);
-        root.add_child(&child_2);
+        REQUIRE(root.add_child(&child_1) == true);
+        REQUIRE(root.add_child(&child_2) == true);
 
         REQUIRE(child_1.get_id() == 1);
         REQUIRE(child_2.get_id() == 2);
@@ -92,8 +92,6 @@ TEST_CASE("Testing typical node of tree interface - BehaviorEmpty class", "[Beha
         REQUIRE(root->get_number_of_children() == 2);
 
         REQUIRE(behaviors.size() == 3);
-
-        root->PrintPretty("", false, std::cout);
 
         for(auto& b : behaviors)
         {

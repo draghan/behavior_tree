@@ -26,7 +26,7 @@ public:
 
     bool can_have_children() override
     {
-        return false;
+        return true;
     }
 
 protected:
