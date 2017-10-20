@@ -64,15 +64,15 @@ TEST_CASE("Testing tree interface of BehaviorTree class", "[Tree]")
         REQUIRE(act_2->get_parent() == seq_1);
         REQUIRE(act_3->get_parent() == seq_1);
 
-        REQUIRE(act_2->get_left_most_sibling() == act_2);
-        REQUIRE(act_2->get_next_sibling() == act_3);
-        REQUIRE(act_5->get_left_most_sibling() == seq_1);
-        REQUIRE(act_5->get_next_sibling() == nullptr);
-        REQUIRE(act_5->get_previous_sibling() == act_4);
+        REQUIRE(act_2->draw_helper.get_left_most_sibling() == act_2);
+        REQUIRE(act_2->draw_helper.get_next_sibling() == act_3);
+        REQUIRE(act_5->draw_helper.get_left_most_sibling() == seq_1);
+        REQUIRE(act_5->draw_helper.get_next_sibling() == nullptr);
+        REQUIRE(act_5->draw_helper.get_previous_sibling() == act_4);
 
-        REQUIRE(root->get_left_most_sibling() == nullptr);
-        REQUIRE(root->get_next_sibling() == nullptr);
-        REQUIRE(root->get_previous_sibling() == nullptr);
+        REQUIRE(root->draw_helper.get_left_most_sibling() == nullptr);
+        REQUIRE(root->draw_helper.get_next_sibling() == nullptr);
+        REQUIRE(root->draw_helper.get_previous_sibling() == nullptr);
     }
 
 

@@ -17,9 +17,44 @@ enum class BehaviorState :uint8_t
     running
 };
 
+class IBehavior;
+
+class DrawHelper
+{
+public:
+    DrawHelper(class IBehavior *owner);
+
+    int x;
+    int y;
+    float mod;
+    float width;
+    float height;
+
+
+    bool is_leaf() const;
+
+    IBehavior *get_previous_sibling() const;
+
+    IBehavior *get_next_sibling() const;
+
+    IBehavior *get_left_most_sibling() const;
+
+    IBehavior *get_left_most_child() const;
+
+    IBehavior *get_right_most_child() const;
+
+private:
+    IBehavior *owner;
+};
+
+
 class IBehavior
 {
 public:
+    friend class DrawHelper;
+
+    DrawHelper draw_helper;
+
     using ptr = IBehavior *;
 
     auto get_id() const
@@ -71,98 +106,6 @@ public:
         return parent;
     }
 
-    bool is_leaf() const
-    {
-        return children.size() == 0;
-    }
-
-    ptr get_previous_sibling() const
-    {
-        if (parent == nullptr)
-        {
-            return nullptr;
-        }
-        size_t id_found;
-        size_t id_last = parent->children.size();
-        auto &siblings = parent->children;
-        for (id_found = 0; id_found < id_last; ++id_found)
-        {
-            if (siblings[id_found]->id == this->id)
-            {
-                break;
-            }
-        }
-        if (id_found == id_last || id_found == 0)
-        {
-            return nullptr;
-        } else
-        {
-            return siblings[id_found - 1];
-        }
-    }
-
-    ptr get_next_sibling() const
-    {
-        if (parent == nullptr)
-        {
-            return nullptr;
-        }
-        size_t id_found;
-        size_t id_last = parent->children.size();
-        auto &siblings = parent->children;
-        for (id_found = 0; id_found < id_last; ++id_found)
-        {
-            if (siblings[id_found]->id == this->id)
-            {
-                break;
-            }
-        }
-        if (id_found == id_last || id_found == id_last - 1)
-        {
-            return nullptr;
-        } else
-        {
-            return siblings[id_found + 1];
-        }
-    }
-
-    ptr get_left_most_sibling() const
-    {
-        if (parent == nullptr)
-        {
-            return nullptr;
-        }
-        auto &siblings = parent->children;
-        if (siblings.size() < 2)
-        {
-            return nullptr;
-        } else
-        {
-            return siblings[0];
-        }
-    }
-
-    ptr get_left_most_child() const
-    {
-        if (children.size() == 0)
-        {
-            return nullptr;
-        } else
-        {
-            return children[0];
-        }
-    }
-
-    ptr get_right_most_child() const
-    {
-        if (children.size() == 0)
-        {
-            return nullptr;
-        } else
-        {
-            return children[children.size() - 1];
-        }
-    }
 
 
     void PrintPretty(std::string indent, bool last, std::ostream& stream) // todo: clean print functions
@@ -186,7 +129,7 @@ public:
     }
 
     explicit IBehavior(ptr parent, uint32_t id = 0)
-            : children{}, parent{parent}, id{id}, status{BehaviorState::undefined}
+            : draw_helper{this}, children{}, parent{parent}, id{id}, status{BehaviorState::undefined}
     {}
 
     virtual ~IBehavior() = default;
