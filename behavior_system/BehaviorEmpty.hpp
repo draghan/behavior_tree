@@ -15,8 +15,8 @@ class BehaviorEmpty :public IBehavior
 public:
     ~BehaviorEmpty() override = default;
 
-    BehaviorEmpty(uint32_t id)
-            : IBehavior{id}
+    BehaviorEmpty(uint32_t id, IBehavior::ptr parent = nullptr)
+            : IBehavior{parent, id}
     {}
 
     virtual void print(std::ostream& stream)

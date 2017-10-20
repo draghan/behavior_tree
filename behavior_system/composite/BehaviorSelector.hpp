@@ -21,8 +21,8 @@ public:
         return true;
     }
 
-    explicit BehaviorSelector(uint32_t id)
-            : IBehavior{id}
+    explicit BehaviorSelector(uint32_t id, IBehavior::ptr parent = nullptr)
+            : IBehavior{parent, id}
     {
     }
 

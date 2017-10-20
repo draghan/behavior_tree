@@ -18,8 +18,8 @@ public:
 
     using action_t = std::function<BehaviorState()>;
 
-    BehaviorAction(uint32_t id, action_t action) :
-            IBehavior(id),
+    BehaviorAction(uint32_t id, action_t action, IBehavior::ptr parent = nullptr) :
+            IBehavior(parent, id),
             action{std::move(action)}
     {}
 

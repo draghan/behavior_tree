@@ -198,22 +198,22 @@ public:
 
     bool add_sequence()
     {
-        return add_child(new BehaviorSequence(id_any));
+        return add_child(new BehaviorSequence(id_any, active));
     }
 
     bool add_selector()
     {
-        return add_child(new BehaviorSelector(id_any));
+        return add_child(new BehaviorSelector(id_any, active));
     }
 
     bool add_action(BehaviorAction::action_t &&action)
     {
-        return add_child(new BehaviorAction(id_any, std::move(action)));
+        return add_child(new BehaviorAction(id_any, std::move(action), active));
     }
 
     bool add_condition(BehaviorCondition::predicate_t &&predicate)
     {
-        return add_child(new BehaviorCondition(id_any, std::move(predicate)));
+        return add_child(new BehaviorCondition(id_any, std::move(predicate), active));
     }
 
 

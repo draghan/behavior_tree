@@ -14,8 +14,8 @@ public:
         return true;
     }
 
-    explicit BehaviorSequence(uint32_t id)
-            : IBehavior{id}
+    explicit BehaviorSequence(uint32_t id, IBehavior::ptr parent = nullptr)
+            : IBehavior{parent, id}
     {
     }
 

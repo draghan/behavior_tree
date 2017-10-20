@@ -9,6 +9,74 @@
 
 TEST_CASE("Testing tree interface of BehaviorTree class", "[Tree]")
 {
+    SECTION("Test parent-related methods of nodes")
+    {
+        /*
+                 selector-root-0
+              __________|____________
+              |         |           |
+            sequence-1  action-4  action-5
+              ___|_______
+              |         |
+            action-2  action-3
+
+         */
+
+        BehaviorTree tree;
+        tree.add_selector();
+        tree.add_sequence();
+        tree.set_at_relatively(0);
+        tree.add_condition([]() { return true; });
+        tree.add_condition([]() { return true; });
+        tree.set_at_absolutely();
+        tree.add_condition([]() { return true; });
+        tree.add_condition([]() { return true; });
+
+        REQUIRE(tree.get_node_count() == 6);
+        auto root = tree.get();
+        REQUIRE(root->get_id() == 0);
+
+        tree.set_at_absolutely(0);
+        auto seq_1 = tree.get();
+        REQUIRE(seq_1->get_id() == 1);
+
+        tree.set_at_absolutely(1);
+        auto act_4 = tree.get();
+        REQUIRE(act_4->get_id() == 4);
+
+        tree.set_at_absolutely(2);
+        auto act_5 = tree.get();
+        REQUIRE(act_5->get_id() == 5);
+
+        tree.set_at_absolutely(0, 0);
+        auto act_2 = tree.get();
+        REQUIRE(act_2->get_id() == 2);
+
+        tree.set_at_absolutely(0, 1);
+        auto act_3 = tree.get();
+        REQUIRE(act_3->get_id() == 3);
+
+
+        REQUIRE(root->get_parent() == nullptr);
+        REQUIRE(seq_1->get_parent() == root);
+        REQUIRE(act_4->get_parent() == root);
+        REQUIRE(act_5->get_parent() == root);
+        REQUIRE(act_2->get_parent() == seq_1);
+        REQUIRE(act_3->get_parent() == seq_1);
+
+        REQUIRE(act_2->get_left_most_sibling() == act_2);
+        REQUIRE(act_2->get_next_sibling() == act_3);
+        REQUIRE(act_5->get_left_most_sibling() == seq_1);
+        REQUIRE(act_5->get_next_sibling() == nullptr);
+        REQUIRE(act_5->get_previous_sibling() == act_4);
+
+        REQUIRE(root->get_left_most_sibling() == nullptr);
+        REQUIRE(root->get_next_sibling() == nullptr);
+        REQUIRE(root->get_previous_sibling() == nullptr);
+    }
+
+
+
     SECTION("Constructor with root data")
     {
         BehaviorTree tree{new BehaviorAction{12, []() { return BehaviorState::running; }}};
@@ -119,6 +187,53 @@ TEST_CASE("Testing tree interface of BehaviorTree class", "[Tree]")
         REQUIRE(counter_1 == 1);
         REQUIRE(counter_2 == 1);
     }
+
+//    SECTION("Testing operator+=") // todo
+//    {
+//        int counter_1 = 0;
+//        int counter_2 = 0;
+//        BehaviorTree tree1;
+//        tree1.add_selector();
+//        tree1.add_action([&]()
+//                         {
+//                             ++counter_1;
+//                             return BehaviorState::failure;
+//                         });
+//        tree1.add_action([&]()
+//                         {
+//                             ++counter_1;
+//                             return BehaviorState::failure;
+//                         });
+//
+//        BehaviorTree tree2;
+//        tree2.add_sequence();
+//        tree2.add_action([&]()
+//                         {
+//                             ++counter_2;
+//                             return BehaviorState ::success;
+//                         });
+//        tree2.add_action([&]()
+//                         {
+//                             ++counter_2;
+//                             return BehaviorState::success;
+//                         });
+//        REQUIRE(tree1.evaluate() == BehaviorState::failure);
+//        REQUIRE(counter_1 == 2);
+//        REQUIRE(tree2.evaluate() == BehaviorState::success);
+//        REQUIRE(counter_2 == 2);
+//        counter_1 = counter_2 = 0;
+//
+//        tree1 += std::move(tree2);
+//        REQUIRE(tree1.get_node_count() == 6);
+//        REQUIRE(tree2.get_node_count() == 0);
+//
+//        REQUIRE(tree1.evaluate() == BehaviorState::success);
+//        REQUIRE(counter_1 == 2);
+//        REQUIRE(counter_2 == 2);
+//        REQUIRE(tree2.evaluate() == BehaviorState::undefined);
+//        REQUIRE(counter_1 == 2);
+//        REQUIRE(counter_2 == 2);
+//    }
 
     SECTION("Testing \'set_at_absolutely\' with {0-> {1-> {3(), 4()}} {2()}}")
     {

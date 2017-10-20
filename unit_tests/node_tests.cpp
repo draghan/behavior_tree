@@ -98,4 +98,9 @@ TEST_CASE("Testing typical node of tree interface - BehaviorEmpty class", "[Beha
             delete b;
         }
     }
+
+    SECTION("Test parent-related methods")
+    {
+
+    }
 }

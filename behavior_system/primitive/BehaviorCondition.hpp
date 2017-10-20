@@ -23,8 +23,8 @@ public:
 
     using predicate_t = std::function<bool()>;
 
-    BehaviorCondition(uint32_t id, predicate_t predicate)
-            : IBehavior(id), predicate{std::move(predicate)}
+    BehaviorCondition(uint32_t id, predicate_t predicate, IBehavior::ptr parent = nullptr)
+            : IBehavior(parent, id), predicate{std::move(predicate)}
     {
     }
 
