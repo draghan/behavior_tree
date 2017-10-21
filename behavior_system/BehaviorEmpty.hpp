@@ -29,6 +29,11 @@ public:
         return true;
     }
 
+    std::string get_glyph() override
+    {
+        return "*";
+    }
+
 protected:
     BehaviorState internal_evaluate() override
     {

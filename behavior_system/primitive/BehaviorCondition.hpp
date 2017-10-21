@@ -21,6 +21,11 @@ public:
         stream << "( )\tid = " << id << '\n';
     }
 
+    std::string get_glyph() override
+    {
+        return "( )";
+    }
+
     using predicate_t = std::function<bool()>;
 
     BehaviorCondition(uint32_t id, predicate_t predicate, IBehavior::ptr parent = nullptr)

@@ -18,6 +18,15 @@ bool DrawHelper::is_leaf() const
     return owner->children.size() == 0;
 }
 
+bool DrawHelper::is_left_most() const
+{
+    if (owner->parent == nullptr)
+    {
+        return true;
+    }
+    return (get_left_most_sibling()) == owner;
+}
+
 IBehavior *DrawHelper::get_previous_sibling() const
 {
     if (owner->parent == nullptr)
@@ -75,7 +84,7 @@ IBehavior *DrawHelper::get_left_most_sibling() const
         return nullptr;
     }
     auto &siblings = owner->parent->children;
-    if (siblings.size() < 2)
+    if (siblings.size() == 0)
     {
         return nullptr;
     } else
@@ -104,4 +113,9 @@ IBehavior *DrawHelper::get_right_most_child() const
     {
         return owner->children[owner->children.size() - 1];
     }
+}
+
+IBehavior *DrawHelper::parent() const
+{
+    return owner->parent;
 }

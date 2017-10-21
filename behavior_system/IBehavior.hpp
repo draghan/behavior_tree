@@ -33,6 +33,8 @@ public:
 
     bool is_leaf() const;
 
+    bool is_left_most() const;
+
     IBehavior *get_previous_sibling() const;
 
     IBehavior *get_next_sibling() const;
@@ -43,6 +45,12 @@ public:
 
     IBehavior *get_right_most_child() const;
 
+    IBehavior *parent() const;
+
+    std::vector<IBehavior *> children() const
+    {
+        return owner->children;
+    }
 private:
     IBehavior *owner;
 };
@@ -149,6 +157,8 @@ public:
     {
         return false;
     }
+
+    virtual std::string get_glyph() = 0;
 
     virtual void print(std::ostream& stream)
     {
