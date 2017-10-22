@@ -2,12 +2,12 @@
 // Created by draghan on 2017-10-21.
 //
 
-#include "DrawHelper.hpp"
+#include "EditorMetadata.hpp"
 #include "IBehavior.hpp"
 
 #ifndef __arm__
 
-DrawHelper::DrawHelper(class IBehavior *owner)
+EditorMetadata::EditorMetadata(class IBehavior *owner)
         : x{0},
           y{0},
           mod{0.0f},
@@ -16,17 +16,17 @@ DrawHelper::DrawHelper(class IBehavior *owner)
           owner{owner}
 {}
 
-std::vector<IBehavior *> DrawHelper::children() const
+std::vector<IBehavior *> EditorMetadata::children() const
 {
     return owner->children;
 }
 
-bool DrawHelper::is_leaf() const
+bool EditorMetadata::is_leaf() const
 {
     return owner->children.empty();
 }
 
-bool DrawHelper::is_left_most() const
+bool EditorMetadata::is_left_most() const
 {
     if (owner->parent == nullptr)
     {
@@ -35,7 +35,7 @@ bool DrawHelper::is_left_most() const
     return (get_left_most_sibling()) == owner;
 }
 
-IBehavior *DrawHelper::get_previous_sibling() const
+IBehavior *EditorMetadata::get_previous_sibling() const
 {
     if (owner->parent == nullptr)
     {
@@ -60,7 +60,7 @@ IBehavior *DrawHelper::get_previous_sibling() const
     }
 }
 
-IBehavior *DrawHelper::get_next_sibling() const
+IBehavior *EditorMetadata::get_next_sibling() const
 {
     if (owner->parent == nullptr)
     {
@@ -85,7 +85,7 @@ IBehavior *DrawHelper::get_next_sibling() const
     }
 }
 
-IBehavior *DrawHelper::get_left_most_sibling() const
+IBehavior *EditorMetadata::get_left_most_sibling() const
 {
     if (owner->parent == nullptr)
     {
@@ -101,7 +101,7 @@ IBehavior *DrawHelper::get_left_most_sibling() const
     }
 }
 
-IBehavior *DrawHelper::get_left_most_child() const
+IBehavior *EditorMetadata::get_left_most_child() const
 {
     if(owner->children.empty())
     {
@@ -112,7 +112,7 @@ IBehavior *DrawHelper::get_left_most_child() const
     }
 }
 
-IBehavior *DrawHelper::get_right_most_child() const
+IBehavior *EditorMetadata::get_right_most_child() const
 {
     if(owner->children.empty())
     {
@@ -123,7 +123,7 @@ IBehavior *DrawHelper::get_right_most_child() const
     }
 }
 
-IBehavior *DrawHelper::parent() const
+IBehavior *EditorMetadata::parent() const
 {
     return owner->parent;
 }

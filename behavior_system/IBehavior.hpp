@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include "DrawHelper.hpp"
+#include "EditorMetadata.hpp"
 
 enum class BehaviorState: uint8_t
 {
@@ -25,8 +25,10 @@ public:
     using id_t = uint32_t;
 
 #ifndef __arm__
-    friend class DrawHelper;
-    DrawHelper draw_helper;
+
+    friend class EditorMetadata;
+
+    EditorMetadata draw_helper;
 
     void PrintPretty(std::string indent, bool last, std::ostream &stream);
     virtual void print(std::ostream &stream);

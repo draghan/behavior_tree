@@ -6,13 +6,14 @@
 #ifndef __arm__
 
 #include <vector>
+#include <string>
 
 class IBehavior;
 
-class DrawHelper
+class EditorMetadata
 {
 public:
-    explicit DrawHelper(class IBehavior *owner);
+    explicit EditorMetadata(class IBehavior *owner);
 
     int x;
     int y;
@@ -31,6 +32,9 @@ public:
 
     IBehavior *parent() const;
     std::vector<IBehavior *> children() const;
+
+    std::string metadata;
+    std::string description;
 private:
     IBehavior *owner;
 };
