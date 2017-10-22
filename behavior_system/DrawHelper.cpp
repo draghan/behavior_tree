@@ -2,7 +2,10 @@
 // Created by draghan on 2017-10-21.
 //
 
+#include "DrawHelper.hpp"
 #include "IBehavior.hpp"
+
+#ifndef __arm__
 
 DrawHelper::DrawHelper(class IBehavior *owner)
         : x{0},
@@ -13,9 +16,14 @@ DrawHelper::DrawHelper(class IBehavior *owner)
           owner{owner}
 {}
 
+std::vector<IBehavior *> DrawHelper::children() const
+{
+    return owner->children;
+}
+
 bool DrawHelper::is_leaf() const
 {
-    return owner->children.size() == 0;
+    return owner->children.empty();
 }
 
 bool DrawHelper::is_left_most() const
@@ -84,7 +92,7 @@ IBehavior *DrawHelper::get_left_most_sibling() const
         return nullptr;
     }
     auto &siblings = owner->parent->children;
-    if (siblings.size() == 0)
+    if(siblings.empty())
     {
         return nullptr;
     } else
@@ -95,7 +103,7 @@ IBehavior *DrawHelper::get_left_most_sibling() const
 
 IBehavior *DrawHelper::get_left_most_child() const
 {
-    if (owner->children.size() == 0)
+    if(owner->children.empty())
     {
         return nullptr;
     } else
@@ -106,7 +114,7 @@ IBehavior *DrawHelper::get_left_most_child() const
 
 IBehavior *DrawHelper::get_right_most_child() const
 {
-    if (owner->children.size() == 0)
+    if(owner->children.empty())
     {
         return nullptr;
     } else
@@ -119,3 +127,5 @@ IBehavior *DrawHelper::parent() const
 {
     return owner->parent;
 }
+
+#endif

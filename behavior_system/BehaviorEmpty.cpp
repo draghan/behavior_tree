@@ -5,3 +5,27 @@
 #include "BehaviorEmpty.hpp"
 
 
+BehaviorEmpty::BehaviorEmpty(uint32_t id, IBehavior::ptr parent)
+        : IBehavior{parent, id}
+{
+}
+
+void BehaviorEmpty::print(std::ostream &stream)
+{
+    stream << ".\tid = " << id << '\n';
+}
+
+bool BehaviorEmpty::can_have_children()
+{
+    return true;
+}
+
+std::string BehaviorEmpty::get_glyph()
+{
+    return "*";
+}
+
+BehaviorState BehaviorEmpty::internal_evaluate()
+{
+    return BehaviorState::undefined;
+}

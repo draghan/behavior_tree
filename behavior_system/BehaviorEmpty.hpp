@@ -14,31 +14,12 @@ class BehaviorEmpty :public IBehavior
 {
 public:
     ~BehaviorEmpty() override = default;
-
-    BehaviorEmpty(uint32_t id, IBehavior::ptr parent = nullptr)
-            : IBehavior{parent, id}
-    {}
-
-    virtual void print(std::ostream& stream)
-    {
-        stream << ".\tid = " << id << '\n';
-    }
-
-    bool can_have_children() override
-    {
-        return true;
-    }
-
-    std::string get_glyph() override
-    {
-        return "*";
-    }
-
+    explicit BehaviorEmpty(uint32_t id, IBehavior::ptr parent = nullptr);
+    bool can_have_children() override;
+    std::string get_glyph() override;
+    void print(std::ostream &stream) override;
 protected:
-    BehaviorState internal_evaluate() override
-    {
-        return BehaviorState::undefined;
-    }
+    BehaviorState internal_evaluate() override;
 };
 
 

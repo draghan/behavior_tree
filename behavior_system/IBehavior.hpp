@@ -8,8 +8,9 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "DrawHelper.hpp"
 
-enum class BehaviorState :uint8_t
+enum class BehaviorState: uint8_t
 {
     undefined,
     success,
@@ -17,159 +18,45 @@ enum class BehaviorState :uint8_t
     running
 };
 
-class IBehavior;
-
-class DrawHelper
-{
-public:
-    DrawHelper(class IBehavior *owner);
-
-    int x;
-    int y;
-    float mod;
-    float width;
-    float height;
-
-
-    bool is_leaf() const;
-
-    bool is_left_most() const;
-
-    IBehavior *get_previous_sibling() const;
-
-    IBehavior *get_next_sibling() const;
-
-    IBehavior *get_left_most_sibling() const;
-
-    IBehavior *get_left_most_child() const;
-
-    IBehavior *get_right_most_child() const;
-
-    IBehavior *parent() const;
-
-    std::vector<IBehavior *> children() const
-    {
-        return owner->children;
-    }
-private:
-    IBehavior *owner;
-};
-
-
 class IBehavior
 {
 public:
-    friend class DrawHelper;
+    using ptr = IBehavior *;
+    using id_t = uint32_t;
 
+#ifndef __arm__
+    friend class DrawHelper;
     DrawHelper draw_helper;
 
-    using ptr = IBehavior *;
+    void PrintPretty(std::string indent, bool last, std::ostream &stream);
+    virtual void print(std::ostream &stream);
+#endif
 
-    auto get_id() const
-    {
-        return id;
-    }
+    id_t get_id() const;
+    void set_id(id_t id);
 
-    auto set_id(uint32_t id)
-    {
-        this->id = id;
-    }
+    bool add_child(ptr child);
+    size_t get_number_of_children() const;
 
-    auto add_child(ptr child)
-    {
-        if (!can_have_children() || child == this)
-        {
-            return false;
-        }
+    ptr get_child(size_t index) const;
+    ptr get_last_child() const;
 
-        children.push_back(child);
-        return true;
-    }
+    ptr get_parent() const;
 
-    auto get_number_of_children() const
-    {
-        return children.size();
-    }
-
-    ptr get_child(size_t index) const // todo: unify behavior of get_child and operator[] (or get rid of one of them)
-    {
-        if(index >= children.size())
-        {
-            return nullptr;
-        }
-        return children[index];
-    }
-
-    ptr get_last_child() const
-    {
-        if(children.empty())
-        {
-            return nullptr;
-        }
-        return *(children.end() - 1);
-    }
-
-    ptr get_parent() const
-    {
-        return parent;
-    }
-
-
-
-    void PrintPretty(std::string indent, bool last, std::ostream& stream) // todo: clean print functions
-    {
-        stream << indent;
-        if(last)
-        {
-            stream << "\\-";
-            indent += "  ";
-        }
-        else
-        {
-            stream << ("|-");
-            indent += "| ";
-        }
-        print(stream);
-        for(size_t i = 0; i < children.size(); i++)
-        {
-            children[i]->PrintPretty(indent, i == children.size() - 1, stream);
-        }
-    }
-
-    explicit IBehavior(ptr parent, uint32_t id = 0)
-            : draw_helper{this}, children{}, parent{parent}, id{id}, status{BehaviorState::undefined}
-    {}
-
+    explicit IBehavior(ptr parent, uint32_t id = 0);
     virtual ~IBehavior() = default;
 
-    BehaviorState evaluate()
-    {
-        status = internal_evaluate();
-        return status;
-    }
+    BehaviorState evaluate();
+    BehaviorState get_status() const;
 
-    BehaviorState get_status() const
-    {
-        return status;
-    }
-
-    bool operator==(const IBehavior&)
-    {
-        return false;
-    }
+    bool operator==(const IBehavior &);
 
     virtual std::string get_glyph() = 0;
-
-    virtual void print(std::ostream& stream)
-    {
-        stream << "IBehavior [" << id << "]\n";
-    }
-
     virtual bool can_have_children() = 0;
 protected:
     std::vector<ptr> children;
     ptr parent;
-    uint32_t id;
+    id_t id;
     BehaviorState status;
 
     virtual BehaviorState internal_evaluate() = 0;

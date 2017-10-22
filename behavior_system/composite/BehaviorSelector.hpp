@@ -12,49 +12,18 @@
  * when some of children returns running state or it should remember which child is running and returns immediately to it.
  * */
 
-class BehaviorSelector :public IBehavior
+class BehaviorSelector: public IBehavior
 {
 public:
-
-    bool can_have_children() override
-    {
-        return true;
-    }
-
-    explicit BehaviorSelector(uint32_t id, IBehavior::ptr parent = nullptr)
-            : IBehavior{parent, id}
-    {
-    }
-
+    explicit BehaviorSelector(uint32_t id, IBehavior::ptr parent = nullptr);
     ~BehaviorSelector() override = default;
 
-    void print(std::ostream& stream) override
-    {
-        stream << "[?]\tid = " << id << '\n';
-    }
-
-    std::string get_glyph() override
-    {
-        return "[?]";
-    }
+    bool can_have_children() override;
+    void print(std::ostream &stream) override;
+    std::string get_glyph() override;
 
 protected:
-    BehaviorState internal_evaluate() override
-    {
-        if(children.empty())
-        {
-            return BehaviorState::undefined;
-        }
-
-        for(auto& child : children)
-        {
-            if(child->evaluate() != BehaviorState::failure)
-            {
-                return child->get_status();
-            }
-        }
-        return BehaviorState::failure;
-    }
+    BehaviorState internal_evaluate() override;
 };
 
 

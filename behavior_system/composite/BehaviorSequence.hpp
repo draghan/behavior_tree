@@ -6,48 +6,18 @@
 
 #include "../IBehavior.hpp"
 
-class BehaviorSequence :public IBehavior
+class BehaviorSequence: public IBehavior
 {
 public:
-    bool can_have_children() override
-    {
-        return true;
-    }
-
-    explicit BehaviorSequence(uint32_t id, IBehavior::ptr parent = nullptr)
-            : IBehavior{parent, id}
-    {
-    }
-
+    explicit BehaviorSequence(uint32_t id, IBehavior::ptr parent = nullptr);
     ~BehaviorSequence() override = default;
 
-    void print(std::ostream& stream) override
-    {
-        stream << "[->]\tid = " << id << '\n';
-    }
-
-    std::string get_glyph() override
-    {
-        return "[->]";
-    }
+    bool can_have_children() override;
+    void print(std::ostream &stream) override;
+    std::string get_glyph() override;
 
 protected:
-    BehaviorState internal_evaluate() override
-    {
-        if(children.empty())
-        {
-            return BehaviorState::undefined;
-        }
-
-        for(auto& child : children)
-        {
-            if(child->evaluate() != BehaviorState::success)
-            {
-                return child->get_status();
-            }
-        }
-        return BehaviorState::success;
-    }
+    BehaviorState internal_evaluate() override;
 };
 
 
