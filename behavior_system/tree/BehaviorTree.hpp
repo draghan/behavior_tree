@@ -50,6 +50,7 @@ public:
     BehaviorState evaluate();
 
     void print(std::ostream &stream);
+    void clear();
 private:
     static const id_t id_any;
     std::vector<IBehavior::ptr> nodes;

@@ -22,7 +22,7 @@ void BehaviorAction::print(std::ostream &stream)
 
 std::string BehaviorAction::get_glyph()
 {
-    return "[ ]";
+    return "[   ]";
 }
 
 BehaviorState BehaviorAction::internal_evaluate()

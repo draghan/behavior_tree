@@ -139,7 +139,11 @@ bool BehaviorTree::add_child(IBehavior::ptr &&child)
     {
         root = nodes[0];
         active = root;
+        root->set_id(last_id);
+        ++last_id;
+        return true;
     }
+
     auto added_node = get_last_node();
     if(added_node == nullptr)
     {
@@ -232,4 +236,13 @@ void BehaviorTree::delete_nodes()
         delete node;
     }
     nodes.clear();
+}
+
+void BehaviorTree::clear()
+{
+    delete_nodes();
+    root = nullptr;
+    active = nullptr;
+    last_id = 0;
+    operation_correct = true;
 }

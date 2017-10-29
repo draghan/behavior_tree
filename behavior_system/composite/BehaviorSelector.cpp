@@ -21,7 +21,7 @@ void BehaviorSelector::print(std::ostream &stream)
 
 std::string BehaviorSelector::get_glyph()
 {
-    return "[?]";
+    return "[ ? ]";
 }
 
 BehaviorState BehaviorSelector::internal_evaluate()

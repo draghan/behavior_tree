@@ -16,7 +16,7 @@ void BehaviorCondition::print(std::ostream &stream)
 
 std::string BehaviorCondition::get_glyph()
 {
-    return "( )";
+    return "(   )";
 }
 
 BehaviorCondition::BehaviorCondition(uint32_t id, BehaviorCondition::predicate_t predicate, IBehavior::ptr parent)

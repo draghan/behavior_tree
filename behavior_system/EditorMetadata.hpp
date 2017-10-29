@@ -35,6 +35,7 @@ public:
 
     std::string metadata;
     std::string description;
+    std::string node_type;
 private:
     IBehavior *owner;
 };
