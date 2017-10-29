@@ -3,6 +3,7 @@
 //
 
 #include "BehaviorTree.hpp"
+#include "../Decorator/DecoratorLink.hpp"
 
 const BehaviorTree::id_t BehaviorTree::undefined_id{std::numeric_limits<BehaviorTree::id_t>::max()};
 const BehaviorTree::id_t BehaviorTree::id_any{0};
@@ -153,6 +154,12 @@ bool BehaviorTree::add_child(IBehavior::ptr &&child)
     ++last_id;
     return active->add_child(added_node);
 }
+
+bool BehaviorTree::add_link(BehaviorTree *link)
+{
+    return add_child(new DecoratorLink(link, id_any, active));
+}
+
 
 bool BehaviorTree::add_sequence()
 {
