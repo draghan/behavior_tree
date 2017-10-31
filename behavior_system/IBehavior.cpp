@@ -82,7 +82,10 @@ IBehavior::ptr IBehavior::get_parent() const
 }
 
 IBehavior::IBehavior(IBehavior::ptr parent, uint32_t id)
-        : draw_helper{this},
+        :
+#ifndef __arm__
+        draw_helper{this},
+#endif
           children{},
           parent{parent},
           id{id},
