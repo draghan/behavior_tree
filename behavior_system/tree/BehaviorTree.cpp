@@ -128,14 +128,18 @@ BehaviorTree::id_t BehaviorTree::get_node_count() const
 
 bool BehaviorTree::add_child(IBehavior::ptr &&child)
 {
+#ifndef __arm__
     try
     {
+#endif
         nodes.emplace_back(child);
+#ifndef __arm__
     }
     catch(...)
     {
         return false;
     }
+#endif
     if(nodes.size() == 1)
     {
         root = nodes[0];
