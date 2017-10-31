@@ -7,7 +7,11 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+
+#ifndef __arm__
 #include <iostream>
+
+#endif
 #include "EditorMetadata.hpp"
 
 enum class BehaviorState: uint8_t

@@ -9,10 +9,13 @@ bool BehaviorCondition::can_have_children()
     return false;
 }
 
+#ifndef __arm__
 void BehaviorCondition::print(std::ostream &stream)
 {
     stream << "( )\tid = " << id << '\n';
 }
+
+#endif
 
 std::string BehaviorCondition::get_glyph()
 {

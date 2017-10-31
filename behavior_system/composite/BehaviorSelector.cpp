@@ -14,10 +14,13 @@ BehaviorSelector::BehaviorSelector(uint32_t id, IBehavior::ptr parent)
 {
 }
 
+#ifndef __arm__
 void BehaviorSelector::print(std::ostream &stream)
 {
     stream << "[?]\tid = " << id << '\n';
 }
+
+#endif
 
 std::string BehaviorSelector::get_glyph()
 {

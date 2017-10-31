@@ -14,10 +14,13 @@ BehaviorSequence::BehaviorSequence(uint32_t id, IBehavior::ptr parent)
 {
 }
 
+#ifndef __arm__
 void BehaviorSequence::print(std::ostream &stream)
 {
     stream << "[->]\tid = " << id << '\n';
 }
+
+#endif
 
 std::string BehaviorSequence::get_glyph()
 {

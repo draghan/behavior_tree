@@ -10,10 +10,13 @@ BehaviorEmpty::BehaviorEmpty(uint32_t id, IBehavior::ptr parent)
 {
 }
 
+#ifndef __arm__
 void BehaviorEmpty::print(std::ostream &stream)
 {
     stream << ".\tid = " << id << '\n';
 }
+
+#endif
 
 bool BehaviorEmpty::can_have_children()
 {

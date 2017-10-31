@@ -50,7 +50,9 @@ public:
 
     BehaviorState evaluate();
 
+#ifndef __arm__
     void print(std::ostream &stream);
+#endif
     void clear();
 private:
     static const id_t id_any;

@@ -4,6 +4,7 @@
 
 #include "IBehavior.hpp"
 
+#ifndef __arm__
 void IBehavior::PrintPretty(std::string indent, bool last, std::ostream &stream) // todo: clean print functions
 {
     stream << indent;
@@ -28,6 +29,8 @@ void IBehavior::print(std::ostream &stream)
 {
     stream << "IBehavior [" << id << "]\n";
 }
+
+#endif
 
 IBehavior::id_t IBehavior::get_id() const
 {
