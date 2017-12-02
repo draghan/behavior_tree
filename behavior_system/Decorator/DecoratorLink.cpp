@@ -6,7 +6,7 @@
 
 std::string DecoratorLink::get_glyph()
 {
-    return "d( @ )";
+    return "< d > @";
 }
 
 bool DecoratorLink::can_have_children()
