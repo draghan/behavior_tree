@@ -47,6 +47,9 @@ public:
     bool add_action(BehaviorAction::action_t &&action);
     bool add_condition(BehaviorCondition::predicate_t &&predicate);
     bool add_link(BehaviorTree *link);
+    bool add_invert();
+    bool add_loop(uint32_t times);
+    bool add_max_N_tries(uint32_t tries);
 
     BehaviorState evaluate();
 

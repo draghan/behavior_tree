@@ -4,6 +4,9 @@
 
 #include "BehaviorTree.hpp"
 #include "../Decorator/DecoratorLink.hpp"
+#include "../Decorator/DecoratorInvert.hpp"
+#include "../Decorator/DecoratorLoop.hpp"
+#include "../Decorator/DecoratorMaxNTries.hpp"
 
 const BehaviorTree::id_t BehaviorTree::undefined_id{std::numeric_limits<BehaviorTree::id_t>::max()};
 const BehaviorTree::id_t BehaviorTree::id_any{0};
@@ -162,6 +165,21 @@ bool BehaviorTree::add_child(IBehavior::ptr &&child)
 bool BehaviorTree::add_link(BehaviorTree *link)
 {
     return add_child(new DecoratorLink(link, id_any, active));
+}
+
+bool BehaviorTree::add_invert()
+{
+    return add_child(new DecoratorInvert(id_any, active));
+}
+
+bool BehaviorTree::add_loop(uint32_t times)
+{
+    return add_child(new DecoratorLoop(times, id_any, active));
+}
+
+bool BehaviorTree::add_max_N_tries(uint32_t tries)
+{
+    return add_child(new DecoratorMaxNTries(tries, id_any, active));
 }
 
 
