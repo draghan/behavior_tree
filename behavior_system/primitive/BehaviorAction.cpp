@@ -28,7 +28,7 @@ std::string BehaviorAction::get_glyph()
     return "[   ]";
 }
 
-BehaviorState BehaviorAction::internal_evaluate()
+BehaviorState BehaviorAction::internal_evaluate(id_t id)
 {
     if(action)
     {

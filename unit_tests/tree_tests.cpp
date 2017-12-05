@@ -9,6 +9,70 @@
 
 TEST_CASE("Testing tree interface of BehaviorTree class", "[Tree]")
 {
+    SECTION("Test if \'running\' evaluation is correctly done")
+    {
+        int a1 = 0;
+        int a2 = 0;
+        int a3 = 0;
+        auto action1 = [&]()
+        {
+            ++a1;
+            return BehaviorState::success;
+        };
+        auto action2 = [&]()
+        {
+            ++a2;
+            if(a2 < 3)
+            {
+                return BehaviorState::running;
+            }
+            else
+            {
+                return BehaviorState::success;
+            }
+        };
+        auto action3 = [&]()
+        {
+            ++a3;
+            return BehaviorState::success;
+        };
+        auto action_false = [&]()
+        {
+            return BehaviorState::failure;
+        };
+        BehaviorTree tree;
+        tree.add_selector();
+        tree.set_at_absolutely();
+        tree.add_child(new BehaviorAction{0, action_false});
+        tree.add_sequence();
+        tree.set_at_absolutely(1);
+        tree.add_child(new BehaviorAction{0, action1});
+        tree.add_child(new BehaviorAction{0, action2});
+        tree.add_child(new BehaviorAction{0, action3});
+        tree.set_at_absolutely();
+        REQUIRE(tree.get_node_count() == 6);
+
+        REQUIRE(tree.evaluate() == BehaviorState::running);
+        REQUIRE(a1 == 1);
+        REQUIRE(a2 == 1);
+        REQUIRE(a3 == 0);
+
+        REQUIRE(tree.evaluate() == BehaviorState::running);
+        REQUIRE(a1 == 1);
+        REQUIRE(a2 == 2);
+        REQUIRE(a3 == 0);
+
+        REQUIRE(tree.evaluate() == BehaviorState::success);
+        REQUIRE(a1 == 1);
+        REQUIRE(a2 == 3);
+        REQUIRE(a3 == 1);
+
+        REQUIRE(tree.evaluate() == BehaviorState::success);
+        REQUIRE(a1 == 2);
+        REQUIRE(a2 == 4);
+        REQUIRE(a3 == 2);
+    }
+
     SECTION("Test parent-related methods of nodes")
     {
         /*

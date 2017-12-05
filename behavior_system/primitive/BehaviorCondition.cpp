@@ -28,7 +28,7 @@ BehaviorCondition::BehaviorCondition(uint32_t id, BehaviorCondition::predicate_t
 {
 }
 
-BehaviorState BehaviorCondition::internal_evaluate()
+BehaviorState BehaviorCondition::internal_evaluate(id_t id)
 {
     if(!predicate)
     {

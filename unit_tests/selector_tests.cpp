@@ -329,7 +329,6 @@ TEST_CASE("Testing BehaviorSelector class", "[Selector]")
 
             e2 = e1;
             e2.running++;
-            e2.failure++;
 
             BehaviorSelector selector{0};
             REQUIRE(selector.add_child(&fail) == true);
@@ -410,11 +409,11 @@ TEST_CASE("Testing BehaviorSelector class", "[Selector]")
         e1.success = 0;
         e1.xstate = BehaviorState::running;
         e2 = e1;
-        e2.failure++;
+        //e2.failure++;
         e2.success++;
         e2.xstate = BehaviorState::success;
         e3 = e2;
-        e3.failure += 2;
+        e3.failure += 1;
         e3.success++;
         e2.xstate = BehaviorState::success;
 

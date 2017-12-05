@@ -22,7 +22,7 @@ bool DecoratorLoop::can_have_children()
     return true;
 }
 
-BehaviorState DecoratorLoop::internal_evaluate()
+BehaviorState DecoratorLoop::internal_evaluate(id_t id)
 {
     if(children.empty())
     {
@@ -34,7 +34,7 @@ BehaviorState DecoratorLoop::internal_evaluate()
     }
     for(; counter < max; ++counter)
     {
-        auto result = children[0]->evaluate();
+        auto result = get_child_for_eval(0)->evaluate();
         if(result == BehaviorState::failure)
         {
             reset = true;

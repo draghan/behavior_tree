@@ -22,7 +22,7 @@ bool DecoratorMaxNTries::can_have_children()
     return true;
 }
 
-BehaviorState DecoratorMaxNTries::internal_evaluate()
+BehaviorState DecoratorMaxNTries::internal_evaluate(id_t id)
 {
     if(children.empty())
     {
@@ -35,7 +35,7 @@ BehaviorState DecoratorMaxNTries::internal_evaluate()
 
     for(; counter < max; ++counter)
     {
-        auto result = children[0]->evaluate();
+        auto result = get_child_for_eval(0)->evaluate();
         if(result == BehaviorState::success)
         {
             reset = true;

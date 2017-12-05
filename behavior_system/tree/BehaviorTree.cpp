@@ -204,6 +204,7 @@ bool BehaviorTree::add_condition(BehaviorCondition::predicate_t &&predicate)
 }
 
 #ifndef __arm__
+
 void BehaviorTree::print(std::ostream &stream)
 {
     bool root_is_lonely{root->get_number_of_children() == 0};

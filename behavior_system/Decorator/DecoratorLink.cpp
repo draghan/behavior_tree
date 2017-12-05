@@ -14,7 +14,7 @@ bool DecoratorLink::can_have_children()
     return false;
 }
 
-BehaviorState DecoratorLink::internal_evaluate()
+BehaviorState DecoratorLink::internal_evaluate(id_t id)
 {
     if(link == nullptr)
     {

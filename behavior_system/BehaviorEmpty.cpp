@@ -28,7 +28,7 @@ std::string BehaviorEmpty::get_glyph()
     return "*";
 }
 
-BehaviorState BehaviorEmpty::internal_evaluate()
+BehaviorState BehaviorEmpty::internal_evaluate(id_t id)
 {
     return BehaviorState::undefined;
 }

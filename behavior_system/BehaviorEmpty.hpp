@@ -25,7 +25,7 @@ public:
     void print(std::ostream &stream) override;
 #endif
 protected:
-    BehaviorState internal_evaluate() override;
+    BehaviorState internal_evaluate(id_t id_child) override;
 };
 
 

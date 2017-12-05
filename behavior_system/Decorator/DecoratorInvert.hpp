@@ -14,7 +14,7 @@ public:
     std::string get_glyph() override;
     bool can_have_children() override;
 protected:
-    BehaviorState internal_evaluate() override;
+    BehaviorState internal_evaluate(id_t id) override;
 };
 
 

@@ -59,13 +59,39 @@ public:
 
     virtual std::string get_glyph() = 0;
     virtual bool can_have_children() = 0;
+
 protected:
     std::vector<ptr> children;
     ptr parent;
     id_t id;
     BehaviorState status;
+    id_t last_evaluated_child;
 
-    virtual BehaviorState internal_evaluate() = 0;
+    ptr get_child_for_eval(id_t id)
+    {
+        last_evaluated_child = id;
+        if(id >= children.size())
+        {
+            return nullptr;
+        }
+        return children[id];
+    }
+
+    id_t get_last_evaluated_child_id()
+    {
+        if(last_evaluated_child >= children.size())
+        {
+            last_evaluated_child = 0;
+        }
+        return last_evaluated_child;
+    }
+
+    virtual BehaviorState internal_evaluate(id_t id_child_for_evaluation) = 0;
+
+    BehaviorState internal_evaluate()
+    {
+        return internal_evaluate(0);
+    }
 };
 
 

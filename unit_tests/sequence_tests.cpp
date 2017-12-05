@@ -142,7 +142,7 @@ TEST_CASE("Testing BehaviorSequence class", "[Sequence]")
             e1.xstate = BehaviorState::running;
 
             e2 = e1;
-            e2.success++;
+            //e2.success++;
             e2.running++;
 
             BehaviorSequence sequence{0};
@@ -368,10 +368,10 @@ TEST_CASE("Testing BehaviorSequence class", "[Sequence]")
         REQUIRE(counter == 2);
 
         REQUIRE(sequence.evaluate() == BehaviorState::success);
-        REQUIRE(counter == 4);
+        REQUIRE(counter == 3);
 
         REQUIRE(sequence.evaluate() == BehaviorState::running);
-        REQUIRE(counter == 6);
+        REQUIRE(counter == 5);
     }
 
     SECTION("Testing with {success, running/success, success, failure/success}")
@@ -441,16 +441,16 @@ TEST_CASE("Testing BehaviorSequence class", "[Sequence]")
         REQUIRE(sequence.evaluate() == BehaviorState::failure);
         REQUIRE(counter_failure == 1);
         REQUIRE(counter_running == 1);
-        REQUIRE(counter_success == 4);
+        REQUIRE(counter_success == 3);
 
         REQUIRE(sequence.evaluate() == BehaviorState::running);
         REQUIRE(counter_failure == 1);
         REQUIRE(counter_running == 2);
-        REQUIRE(counter_success == 5);
+        REQUIRE(counter_success == 4);
 
         REQUIRE(sequence.evaluate() == BehaviorState::success);
         REQUIRE(counter_failure == 1);
         REQUIRE(counter_running == 2);
-        REQUIRE(counter_success == 9);
+        REQUIRE(counter_success == 7);
     }
 }

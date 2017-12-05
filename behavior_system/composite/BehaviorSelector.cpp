@@ -27,19 +27,27 @@ std::string BehaviorSelector::get_glyph()
     return "[ ? ]";
 }
 
-BehaviorState BehaviorSelector::internal_evaluate()
+BehaviorState BehaviorSelector::internal_evaluate(id_t id)
 {
     if(children.empty())
     {
         return BehaviorState::undefined;
     }
 
-    for(auto &child : children)
+    for(id_t i = id; i < children.size(); ++i)
     {
-        if(child->evaluate() != BehaviorState::failure)
+        if(get_child_for_eval(i)->evaluate() != BehaviorState::failure)
         {
-            return child->get_status();
+            return get_child_for_eval(i)->get_status();
         }
     }
+
+//    for(auto &child : children)
+//    {
+//        if(child->evaluate() != BehaviorState::failure)
+//        {
+//            return child->get_status();
+//        }
+//    }
     return BehaviorState::failure;
 }

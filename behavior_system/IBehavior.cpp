@@ -95,9 +95,17 @@ IBehavior::IBehavior(IBehavior::ptr parent, uint32_t id)
 
 BehaviorState IBehavior::evaluate()
 {
-    status = internal_evaluate();
+    if(status == BehaviorState::running)
+    {
+        status = internal_evaluate(get_last_evaluated_child_id());
+    }
+    else
+    {
+        status = internal_evaluate();
+    }
     return status;
 }
+
 
 BehaviorState IBehavior::get_status() const
 {
