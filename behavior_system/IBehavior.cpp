@@ -5,6 +5,7 @@
 #include "IBehavior.hpp"
 
 #ifndef __arm__
+
 void IBehavior::PrintPretty(std::string indent, bool last, std::ostream &stream) // todo: clean print functions
 {
     stream << indent;
@@ -58,7 +59,7 @@ size_t IBehavior::get_number_of_children() const
     return children.size();
 }
 
-IBehavior::ptr IBehavior::get_child(size_t index) const // todo: unify behavior of get_child and operator[] (or get rid of one of them)
+IBehavior::ptr IBehavior::get_child(size_t index) const
 {
     if(index >= children.size())
     {
@@ -84,7 +85,7 @@ IBehavior::ptr IBehavior::get_parent() const
 IBehavior::IBehavior(IBehavior::ptr parent, uint32_t id)
         :
 #ifndef __arm__
-        draw_helper{this},
+          draw_helper{this},
 #endif
           children{},
           parent{parent},

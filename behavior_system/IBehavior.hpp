@@ -10,8 +10,8 @@
 
 #ifndef __arm__
 #include <iostream>
-
 #endif
+
 #include "EditorMetadata.hpp"
 
 enum class BehaviorState: uint8_t
@@ -36,6 +36,7 @@ public:
 
     void PrintPretty(std::string indent, bool last, std::ostream &stream);
     virtual void print(std::ostream &stream);
+
 #endif
 
     id_t get_id() const;

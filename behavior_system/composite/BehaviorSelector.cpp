@@ -15,6 +15,7 @@ BehaviorSelector::BehaviorSelector(uint32_t id, IBehavior::ptr parent)
 }
 
 #ifndef __arm__
+
 void BehaviorSelector::print(std::ostream &stream)
 {
     stream << "[?]\tid = " << id << '\n';
@@ -41,13 +42,5 @@ BehaviorState BehaviorSelector::internal_evaluate(id_t id)
             return get_child_for_eval(i)->get_status();
         }
     }
-
-//    for(auto &child : children)
-//    {
-//        if(child->evaluate() != BehaviorState::failure)
-//        {
-//            return child->get_status();
-//        }
-//    }
     return BehaviorState::failure;
 }

@@ -41,13 +41,5 @@ BehaviorState BehaviorSequence::internal_evaluate(id_t id)
             return get_child_for_eval(i)->get_status();
         }
     }
-
-//    for(auto &child : children)
-//    {
-//        if(child->evaluate() != BehaviorState::success)
-//        {
-//            return child->get_status();
-//        }
-//    }
     return BehaviorState::success;
 }

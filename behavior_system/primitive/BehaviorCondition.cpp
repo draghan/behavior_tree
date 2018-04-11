@@ -14,7 +14,6 @@ void BehaviorCondition::print(std::ostream &stream)
 {
     stream << "( )\tid = " << id << '\n';
 }
-
 #endif
 
 std::string BehaviorCondition::get_glyph()

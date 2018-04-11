@@ -7,11 +7,6 @@
 
 #include "../IBehavior.hpp"
 
-/*
- * todo Consider if composites (selector, sequence) should do reevaluate from scratch in next clock-tick
- * when some of children returns running state or it should remember which child is running and returns immediately to it.
- * */
-
 class BehaviorSelector: public IBehavior
 {
 public:

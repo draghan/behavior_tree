@@ -20,7 +20,6 @@ void BehaviorAction::print(std::ostream &stream)
 {
     stream << "[ ]\tid = " << id << '\n';
 }
-
 #endif
 
 std::string BehaviorAction::get_glyph()
