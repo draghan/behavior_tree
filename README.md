@@ -1,6 +1,6 @@
 ## What's this project?
 
-This is C++ implementation of behavior trees AI system. It has no dependencies, except unit tests part: I've used [Catch library](https://github.com/catchorg/Catch2) (its only header is located on 'external' directory). This project is wrote in C++14 standard.
+This is C++ implementation of behavior trees AI system. It has no dependencies, except unit tests part: I've used [Catch](https://github.com/catchorg/Catch2) library. This project is wrote in C++14 standard.
 
 ## How does it work?
 
@@ -9,12 +9,12 @@ To provide resource-safe interface project provides BehaviorTree class, which is
 In the beginning you have to create instance of BehaviorTree class and full it with behavior nodes. Then you can call evaluate() method on it and check status, probably in some periodic maneer. 
 
 Code of the behavior trees system is located in 'behavior_system' directory.
-There is also 'external' directory, which includes [Catch](https://github.com/catchorg/Catch2) library header.
-Last part of repository is 'unit_tests' directory which contains unit tests of the behavior system, based on [Catch](https://github.com/catchorg/Catch2).
+There is also 'external' directory, which contains [Catch](https://github.com/catchorg/Catch2) library header.
+Last part of repository is 'unit_tests' directory which contains unit tests of the behavior system.
 
-## Who will use this repo or project?
+## Who will use this project?
 
-Everyone who needs behavior trees based AI system. :)
+Everyone who needs behavior trees based AI system. :) Project is distributed under [MIT license](https://opensource.org/licenses/MIT).
 
 ## What is the purpose of this project?
 
