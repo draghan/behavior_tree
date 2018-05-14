@@ -23,9 +23,10 @@
 */
 
 #include <iostream>
-#include "behavior_system/BehaviorEmpty.hpp"
+#include "behavior_system/tree/BehaviorTree.hpp"
+
 
 int main()
 {
-    std::cout << "Hello, world!";
+
 }
