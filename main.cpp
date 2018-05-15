@@ -30,10 +30,10 @@ class Actor
 {
 public:
 
-    Actor():said_hello{false}, rotating{false}
-    {}
-
-    bool said_hello;
+    Actor(): said_hello{false},
+             rotating{false}
+    {
+    }
 
     void say_hello()
     {
@@ -98,6 +98,8 @@ public:
         std::cout << "I'll turn " << degrees << " degrees!\n";
     }
 
+    bool said_hello;
+
 private:
     bool rotating;
 };
@@ -136,13 +138,16 @@ int main()
                                 return BehaviorState::success;
                             });
 
+    // set as active 'lookAround' sequence:
+    example_tree.set_at_absolutely(1);
 
-    example_tree.set_at_absolutely(1); // set as active 'lookAround' sequence
+    // canLookAround condition node:
     example_tree.add_condition([&hero]()
                                {
                                    return hero.can_look_around();
                                });
 
+    // Stop action node:
     example_tree.add_action([&hero]()
                             {
                                 if(hero.is_stopped())
@@ -152,6 +157,8 @@ int main()
                                 hero.stop();
                                 return BehaviorState::running;
                             });
+
+    // Rotate360 action:
     example_tree.add_action([&hero]()
                             {
                                 hero.rotate(360);
@@ -162,7 +169,9 @@ int main()
                                 return BehaviorState::success;
                             });
 
+    // If we want to evaluate whole tree, we have to set root node as active:
     example_tree.set_at_absolutely();
+
     for(int i = 0; i < 15; ++i)
     {
         std::cout << i << " iteration\n";

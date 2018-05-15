@@ -8,11 +8,29 @@ More about BT concept you can find in [Doctoral Thesis "Behavior Trees in Roboti
 
 It defines basic types of nodes used in behavior trees, like composites (selector and sequence), decorators (link, inversion, loop) and primitives (action and condition).
 To provide resource-safe interface exists `BehaviorTree` class, which is kind of manager for raw behavior nodes.
-At first you have to create instance of `BehaviorTree` class and full it with behavior nodes. Then you can call `evaluate()` method on it and check tree's status, probably in some periodic way. 
+
+At first you have to create instance of `BehaviorTree` class and fill it with behavior nodes. Then you can call `evaluate()` method on it and check tree's status, probably in some periodic way. 
+
+## Structure of project
 
 Code of the BT system is located in 'behavior_system' directory.
 There is also 'external' directory, which contains [Catch](https://github.com/catchorg/Catch2) library header.
 Last part of repository is 'unit_tests' directory which contains unit tests of the BT system.
+
+Behavior system is main part of project: it contains definitions of nodes and tree structure. 
+
+Class `IBehavior` [source: [[1]](./behavior_system/IBehavior.hpp) [[2]](./behavior_system/IBehavior.cpp)] is a base class for all behavior nodes:
+1. `BehaviorEmpty` - this is nothing more than it's called. :) [source: [[1]](./behavior_system/BehaviorEmpty.hpp) [[2]](./behavior_system/BehaviorEmpty.cpp)],
+1. `BehaviorSelector` - [source: [[1]](./behavior_system/composite/BehaviorSelector.hpp) [[2]](./behavior_system/composite/BehaviorSelector.cpp)],
+1. `BehaviorSequence` - [source: [[1]](./behavior_system/composite/BehaviorSequence.hpp) [[2]](./behavior_system/composite/BehaviorSequence.cpp)],
+1. `BehaviorAction` - [source: [[1]](./behavior_system/primitive/BehaviorAction.hpp) [[2]](./behavior_system/primitive/BehaviorAction.cpp)],
+1. `BehaviorCondition` - [source: [[1]](./behavior_system/primitive/BehaviorCondition.hpp) [[2]](./behavior_system/primitive/BehaviorCondition.cpp)],
+1. `DecoratorInvert` - [source: [[1]](./behavior_system/decorator/DecoratorInvert.hpp) [[2]](./behavior_system/decorator/DecoratorInvert.cpp)],
+1. `DecoratorLoop` - [source: [[1]](./behavior_system/decorator/DecoratorLoop.hpp) [[2]](./behavior_system/decorator/DecoratorLoop.cpp)],
+1. `DecoratorLink` - [source: [[1]](./behavior_system/decorator/DecoratorLink.hpp) [[2]](./behavior_system/decorator/DecoratorLink.cpp)],
+1. `DecoratorMaxNTries` - [source: [[1]](./behavior_system/decorator/DecoratorMaxNTries.hpp) [[2]](./behavior_system/decorator/DecoratorMaxNTries.cpp)].
+
+`BehaviorTree` class is implemented in 'behavior_system/tree' directory [source: [[1]](./behavior_system/tree/BehaviorTree.hpp) [[2]](./behavior_system/tree/BehaviorTree.cpp)].
 
 ## How to use this code?
 
@@ -34,18 +52,103 @@ Basic idea is simple:
 
 ## An example
 
-Lets assume than we want to create behavior tree like this one:
+Lets assume that we want to create behavior tree like this one:
 
 ![Example behavior tree](./example_behavior_tree.png)
 
 We have designed our tree for simple behavior: actor has to say "hello" once and then it should look around. 
 
-Let assume that `saidHello` is an bool variable, `canLookAround` is some method which checks whether actor could looks around or not and we've prepared our actor for doing all of the stuff described in action nodes, like `Stop` or `Say`, etc.. 
+Let assume that we have some class where `saidHello` is an bool member variable, `canLookAround` is some method which checks whether actor could looks around or not and we've prepared our actor for doing all of the stuff described in action nodes, like `Stop` or `Say`, etc.. Simple dummy class `Actor` satisfies those assumptions:
+
+```C++
+class Actor
+{
+public:
+
+    Actor(): said_hello{false},
+             rotating{false}
+    {
+    }
+
+    void say_hello()
+    {
+        std::cout << "Hello!\n";
+        said_hello = true;
+    }
+
+    bool can_look_around()
+    {
+        static int look_around_counter = 0;
+        constexpr int look_around_limiter = 5;
+
+        if(look_around_counter >= look_around_limiter)
+        {
+            return false;
+        }
+
+        ++look_around_counter;
+        return true;
+    }
+
+    bool is_stopped()
+    {
+        static int stopped_counter = 0;
+        ++stopped_counter;
+
+        if(stopped_counter % 3) // 2/3 of checks will fail
+        {
+            return true;
+        }
+        return false;
+    }
+
+    void stop()
+    {}
+
+    bool is_still_rotating()
+    {
+        static int rotate_counter = 0;
+        if(!rotating)
+        {
+            return false;
+        }
+
+        ++rotate_counter;
+
+        if(rotate_counter % 5) // 4/5 of checks will confirm that actor is rotating
+        {
+            return false;
+        }
+        return true;
+    }
+
+    void rotate(int degrees)
+    {
+        if(rotating)
+        {
+            return;
+        }
+        rotating = true;
+        std::cout << "I'll turn " << degrees << " degrees!\n";
+    }
+
+    bool said_hello;
+    
+private:
+    bool rotating;
+};
+```  
+Lets create an instance of the `Actor` class:
+
+```C++
+Actor hero;
+```
 
 At first you have to create an object of `BehaviorTree` class. It internally stores collection of behavior nodes and points to one of them. Pointed node is called "active node". 
 
 At this stage the collection is empty. 
 You have to add root node to tree. 
+
 Usually the root node is one of the composite nodes: a selector or a sequence - because they can be parents of many children nodes. 
 In the example picture the root node is type of selector:
 
@@ -73,11 +176,9 @@ Now we want to add inversion node, "saidHello" condition node and then action no
 Method `add_condition` takes as parameter `std::function<bool()>`, so we can pass to this function for example a lambda.
 Similarly looks method `add_action` with the difference, that the type of return value of an needed functor is `BehaviorState` object.
 
-Lets assume than we have boolean variable called saidHello somewhere in available scope. The code of left part our example_tree might looks like this:
+The code of left part our example_tree might looks like this:
 
 ```C++
-Actor hero;
-
 example.add_inversion();
 
 // saidHello condition node:
@@ -99,15 +200,16 @@ example.add_action([&hero]()
 Now, when we know basic rules, lets create right part of `example_tree`:
 
 ```C++
-Actor hero;
-// ...
+// set as active 'lookAround' sequence:
+example_tree.set_at_absolutely(1);
 
-example_tree.set_at_absolutely(1); // set as active 'lookAround' sequence
+// canLookAround condition node:
 example_tree.add_condition([&hero]()
                            {
-                                return hero.can_look_around();
+                               return hero.can_look_around();
                            });
-                           
+
+// Stop action node:
 example_tree.add_action([&hero]()
                         {
                             if(hero.is_stopped())
@@ -117,24 +219,102 @@ example_tree.add_action([&hero]()
                             hero.stop();
                             return BehaviorState::running;
                         });
+
+// Rotate360 action:
 example_tree.add_action([&hero]()
                         {
+                            hero.rotate(360);
                             if(hero.is_still_rotating())
                             {
                                 return BehaviorState::running;
                             }
-                            if(hero.has_ended_rotating())
-                            {
-                                return BehaviorState::success; 
-                            }
-                            hero.rotate(360);
-                            return BehaviorState::running;                             
+                            return BehaviorState::success;
                         });
 ```
-We've just prepared simple behavior tree. Now we have to evaluate it to get use from behavior trees system.
+We've just prepared simple behavior tree. Now we have to evaluate it in order to get use from BT system.
 
-All source code of this example:
+```C++
+// If we want to evaluate whole tree, we have to set root node as active:
+example_tree.set_at_absolutely();
 
+for(int i = 0; i < 15; ++i)
+{
+    std::cout << i << " iteration\n";
+
+    auto state = example_tree.evaluate();
+
+    std::cout << "- returned state: ";
+    switch(state)
+    {
+        case BehaviorState::failure:
+            std::cout << "failure";
+            break;
+        case BehaviorState::running:
+            std::cout << "running";
+            break;
+        case BehaviorState::success:
+            std::cout << "success";
+            break;
+        case BehaviorState::undefined:
+            std::cout << "undefined";
+            break;
+    }
+    std::cout << "\n---\n";
+}
+```
+
+All source code of this example you can find in [main.cpp](./main.cpp).
+
+As the result of example code we get:
+```
+0 iteration
+Hello!
+- returned state: success
+---
+1 iteration
+I'll turn 360 degrees!
+- returned state: success
+---
+2 iteration
+- returned state: success
+---
+3 iteration
+- returned state: running
+---
+4 iteration
+- returned state: success
+---
+5 iteration
+- returned state: success
+---
+6 iteration
+- returned state: running
+---
+7 iteration
+- returned state: running
+---
+8 iteration
+- returned state: success
+---
+9 iteration
+- returned state: failure
+---
+10 iteration
+- returned state: failure
+---
+11 iteration
+- returned state: failure
+---
+12 iteration
+- returned state: failure
+---
+13 iteration
+- returned state: failure
+---
+14 iteration
+- returned state: failure
+---
+```
       
 ## Making active
 
