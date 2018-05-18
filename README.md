@@ -89,7 +89,7 @@ And a bit trivial things to do:
 * Add a namespace for project classes.
 * Add a bit more friendly to remember header for including `BehaviorTree` interface. 
 
-##An example
+## An example
 
 _[complete example is located in [main.cpp](./main.cpp) file]_
 
