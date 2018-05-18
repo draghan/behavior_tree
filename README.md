@@ -12,7 +12,7 @@ To provide uniform interface there is implemented `BehaviorTree` class, which is
 
 At first you have to create instance of `BehaviorTree` class and fill it with behavior nodes. Then you can call `evaluate()` method on it and check tree's status, probably in some periodic way.
 
-For more please look at the [example]() section.
+For more please look at the [example](##an-example) section.
 
 ## Structure of project
 
@@ -44,7 +44,7 @@ To use `BehaviorTree` class, include *behavior_system/tree/BehaviorTree.hpp* fil
 
 Basic idea is simple:
 1. create `BehaviorTree` object,
-1. fulfill `BehaviorTree` with nodes:
+1. fill `BehaviorTree` with nodes:
    1. add root node,
    1. add children to root node,
    1. change active node to another one,
@@ -57,7 +57,7 @@ Basic idea is simple:
 1. check return status,
 1. ...  
 
-For more please look at the [example]() section.
+For more please look at the [example](##an-example) section.
 
 To make your own behavior node type:
 * Create class with `IBehavior` class as a base.
@@ -89,7 +89,7 @@ And a bit trivial things to do:
 * Add a namespace for project classes.
 * Add a bit more friendly to remember header for including `BehaviorTree` interface. 
 
-## An example
+(##An-example)
 
 _[complete example is located in [main.cpp](./main.cpp) file]_
 
