@@ -12,7 +12,7 @@ To provide uniform interface there is implemented `BehaviorTree` class, which is
 
 At first you have to create instance of `BehaviorTree` class and fill it with behavior nodes. Then you can call `evaluate()` method on it and check tree's status, probably in some periodic way.
 
-For more please look at the [example](##an-example) section.
+For more please look at the [example](#an-example) section.
 
 ## Structure of project
 
@@ -57,7 +57,7 @@ Basic idea is simple:
 1. check return status,
 1. ...  
 
-For more please look at the [example](##an-example) section.
+For more please look at the [example](#an-example) section.
 
 To make your own behavior node type:
 * Create class with `IBehavior` class as a base.
