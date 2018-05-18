@@ -29,7 +29,6 @@
 class Actor
 {
 public:
-
     Actor(): said_hello{false},
              rotating{false}
     {
@@ -60,7 +59,7 @@ public:
         static int stopped_counter = 0;
         ++stopped_counter;
 
-        if(stopped_counter % 3) // 2/3 of checks will fail
+        if(stopped_counter % 3 == 0) // 2/3 of checks will fail
         {
             return true;
         }
@@ -81,7 +80,7 @@ public:
 
         ++rotate_counter;
 
-        if(rotate_counter % 5) // 4/5 of checks will confirm that actor is rotating
+        if(rotate_counter % 5 == 0) // 4/5 of checks will confirm that actor is rotating
         {
             return false;
         }
@@ -119,7 +118,7 @@ int main()
 
     example_tree.add_invert();
 
-    // go to first child of 'sayHello' sequence node:
+    // go to first child of invert decorator node:
     example_tree.set_at_relatively(0);
 
     // saidHello condition node:
@@ -172,7 +171,7 @@ int main()
     // If we want to evaluate whole tree, we have to set root node as active:
     example_tree.set_at_absolutely();
 
-    for(int i = 0; i < 15; ++i)
+    for(int i = 0; i < 50; ++i)
     {
         std::cout << i << " iteration\n";
 
