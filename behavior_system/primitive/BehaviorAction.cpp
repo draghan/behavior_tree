@@ -39,13 +39,6 @@ BehaviorAction::BehaviorAction(uint32_t id, BehaviorAction::action_t action, IBe
 {
 }
 
-#ifndef __arm__
-void BehaviorAction::print(std::ostream &stream)
-{
-    stream << "[ ]\tid = " << id << '\n';
-}
-#endif
-
 std::string BehaviorAction::get_glyph()
 {
     return "[   ]";

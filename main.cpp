@@ -195,4 +195,6 @@ int main()
         }
         std::cout << "\n---\n";
     }
+
+    example_tree.print(std::cout);
 }

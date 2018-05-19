@@ -38,8 +38,10 @@ public:
     explicit DecoratorLink(BehaviorTree *link, uint32_t id, IBehavior::ptr parent = nullptr);
     std::string get_glyph() override;
     bool can_have_children() override;
+
 protected:
     BehaviorState internal_evaluate(id_t id) override;
+
 private:
     BehaviorTree *link;
 };

@@ -39,9 +39,6 @@ public:
     BehaviorAction(uint32_t id, action_t action, IBehavior::ptr parent = nullptr);
 
     bool can_have_children() override;
-#ifndef __arm__
-    void print(std::ostream &stream) override;
-#endif
     std::string get_glyph() override;
 
 protected:

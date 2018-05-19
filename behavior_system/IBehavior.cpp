@@ -52,7 +52,7 @@ void IBehavior::PrintPretty(std::string indent, bool last, std::ostream &stream)
 
 void IBehavior::print(std::ostream &stream)
 {
-    stream << "IBehavior [" << id << "]\n";
+    stream << get_glyph() << "\tid = " << id << '\n';
 }
 
 #endif
@@ -140,4 +140,33 @@ BehaviorState IBehavior::get_status() const
 bool IBehavior::operator==(const IBehavior &)
 {
     return false;
+}
+
+std::string IBehavior::get_glyph()
+{
+    return "|IB|";
+}
+
+IBehavior::ptr IBehavior::get_child_for_eval(IBehavior::id_t id)
+{
+    last_evaluated_child = id;
+    if(id >= children.size())
+    {
+        return nullptr;
+    }
+    return children[id];
+}
+
+IBehavior::id_t IBehavior::get_last_evaluated_child_id()
+{
+    if(last_evaluated_child >= children.size())
+    {
+        last_evaluated_child = 0;
+    }
+    return last_evaluated_child;
+}
+
+BehaviorState IBehavior::internal_evaluate()
+{
+    return internal_evaluate(0);
 }

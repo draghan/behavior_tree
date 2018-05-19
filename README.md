@@ -63,8 +63,8 @@ To make your own behavior node type:
 * Create class with `IBehavior` class as a base.
 * Override `BehaviorState internal_evaluate(id_t id)` method with designed behavior.
   > Parameter `id_t id` points to particular child to evaluation (it's an index for `IBehavior::ptr get_child_for_eval(id_t id)` method).
-  
-* [optional] Override others virtual methods, for example `bool can_have_children()`.
+* Override `bool can_have_children()` method in order to tell about ability of storing a derivative nodes.  
+* [optional] Override others virtual methods, for example `std::string get_glyph()` for getting a pictogram for your type of node.
 * Extend the `BehaviorTree` class by `bool add_my_new_fancy_behavior_node(some_optional parameters_if_needed)`.
  
 ## Who will use this project?
@@ -91,7 +91,7 @@ And a bit trivial things to do:
 
 ## An example
 
-_[complete example is located in [main.cpp](./main.cpp) file]_
+> All source code of this example you can find in [main.cpp](./main.cpp).
 
 Let assume that we want to create behavior tree like this one:
 
@@ -326,6 +326,4 @@ for(int i = 0; i < 50; ++i)
 }
 ```
 
-All source code of this example you can find in [main.cpp](./main.cpp).
-      
-
+> All source code of this example you can find in [main.cpp](./main.cpp).
