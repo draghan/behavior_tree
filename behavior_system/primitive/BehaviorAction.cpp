@@ -1,3 +1,5 @@
+#include <utility>
+
 /*
     This file is distributed under MIT License.
 
@@ -35,7 +37,7 @@ bool BehaviorAction::can_have_children()
 
 BehaviorAction::BehaviorAction(uint32_t id, BehaviorAction::action_t action, IBehavior::ptr parent):
         IBehavior(parent, id),
-        action{action}
+        action{std::move(action)}
 {
 }
 

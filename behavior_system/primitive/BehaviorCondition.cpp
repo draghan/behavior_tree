@@ -1,3 +1,5 @@
+#include <utility>
+
 /*
     This file is distributed under MIT License.
 
@@ -40,7 +42,7 @@ std::string BehaviorCondition::get_glyph()
 
 BehaviorCondition::BehaviorCondition(uint32_t id, BehaviorCondition::predicate_t predicate, IBehavior::ptr parent)
         : IBehavior(parent, id),
-          predicate{predicate}
+          predicate{std::move(predicate)}
 {
 }
 
