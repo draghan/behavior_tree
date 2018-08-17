@@ -26,8 +26,8 @@
 // Created by draghan on 2017-12-03.
 //
 
-#include "../external/catch.hpp"
-#include "../behavior_system/Decorator/DecoratorMaxNTries.hpp"
+#include "../external/catch/single_include/catch2/catch.hpp"
+#include "../behavior_system/decorator/DecoratorMaxNTries.hpp"
 #include "../behavior_system/primitive/BehaviorAction.hpp"
 
 TEST_CASE("Testing DecoratorMaxNTries class", "[Decorator]")

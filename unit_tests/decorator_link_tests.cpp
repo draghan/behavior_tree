@@ -26,9 +26,9 @@
 // Created by draghan on 2017-10-29.
 //
 
-#include "../external/catch.hpp"
+#include "../external/catch/single_include/catch2/catch.hpp"
 #include "../behavior_system/tree/BehaviorTree.hpp"
-#include "../behavior_system/Decorator/DecoratorLink.hpp"
+#include "../behavior_system/decorator/DecoratorLink.hpp"
 
 TEST_CASE("Testing DecoratorLink class", "[Decorator]")
 {

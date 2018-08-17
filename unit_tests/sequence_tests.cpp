@@ -26,7 +26,7 @@
 // Created by draghan on 2017-10-14.
 //
 
-#include "../external/catch.hpp"
+#include "../external/catch/single_include/catch2/catch.hpp"
 #include "../behavior_system/primitive/BehaviorAction.hpp"
 #include "../behavior_system/composite/BehaviorSequence.hpp"
 

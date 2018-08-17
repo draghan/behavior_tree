@@ -26,8 +26,8 @@
 // Created by draghan on 2017-12-02.
 //
 
-#include "../external/catch.hpp"
-#include "../behavior_system/Decorator/DecoratorInvert.hpp"
+#include "../external/catch/single_include/catch2/catch.hpp"
+#include "../behavior_system/decorator/DecoratorInvert.hpp"
 #include "../behavior_system/primitive/BehaviorAction.hpp"
 
 TEST_CASE("Testing DecoratorInvert class", "[Decorator]")
