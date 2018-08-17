@@ -26,9 +26,12 @@
 // Created by draghan on 2017-10-14.
 //
 
+#include <limits>
 #include "IBehavior.hpp"
 
 #ifndef __arm__
+
+const IBehavior::id_t IBehavior::undefined_id{std::numeric_limits<IBehavior::id_t>::max()};
 
 void IBehavior::PrintPretty(std::string indent, bool last, std::ostream &stream) // todo: clean print functions
 {
@@ -114,7 +117,8 @@ IBehavior::IBehavior(IBehavior::ptr parent, uint32_t id)
           children{},
           parent{parent},
           id{id},
-          status{BehaviorState::undefined}
+          status{BehaviorState::undefined},
+          last_evaluated_child{undefined_id}
 {
 }
 

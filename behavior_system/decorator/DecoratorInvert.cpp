@@ -45,11 +45,11 @@ bool DecoratorInvert::can_have_children()
 
 BehaviorState DecoratorInvert::internal_evaluate(id_t id)
 {
-    if(children.empty())
+    if(children.empty() || id != 0)
     {
         return BehaviorState::undefined;
     }
-    auto result = get_child_for_eval(0)->evaluate();
+    auto result = get_child_for_eval(id)->evaluate();
     if(result == BehaviorState::failure)
     {
         result = BehaviorState::success;

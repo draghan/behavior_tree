@@ -48,7 +48,7 @@ bool DecoratorMaxNTries::can_have_children()
 
 BehaviorState DecoratorMaxNTries::internal_evaluate(id_t id)
 {
-    if(children.empty())
+    if(children.empty() || id != 0)
     {
         return BehaviorState::undefined;
     }
@@ -59,7 +59,7 @@ BehaviorState DecoratorMaxNTries::internal_evaluate(id_t id)
 
     for(; counter < max; ++counter)
     {
-        auto result = get_child_for_eval(0)->evaluate();
+        auto result = get_child_for_eval(id)->evaluate();
         if(result == BehaviorState::success)
         {
             reset = true;

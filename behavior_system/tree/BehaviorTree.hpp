@@ -36,6 +36,7 @@
 #include "../primitive/BehaviorAction.hpp"
 #include "../primitive/BehaviorCondition.hpp"
 
+
 class BehaviorTree
 {
 public:
@@ -64,11 +65,12 @@ public:
     id_t get_id() const;
     id_t get_node_count() const;
 
-    [[deprecated("Use factory methods (add_sequence(), add_selector()...) instead.")]]
-    bool add_child(IBehavior::ptr &&child);
+
     bool add_sequence();
     bool add_selector();
+    bool add_action(BehaviorAction::action_t action);
     bool add_action(BehaviorAction::action_t &&action);
+    bool add_condition(BehaviorCondition::predicate_t predicate);
     bool add_condition(BehaviorCondition::predicate_t &&predicate);
     bool add_link(BehaviorTree *link);
     bool add_invert();
@@ -93,6 +95,7 @@ private:
     void go_to_node_relatively(size_t x);
     void back_to_root();
     void delete_nodes();
+    bool add_child(IBehavior::ptr &&child);
 };
 
 template <typename... Args>

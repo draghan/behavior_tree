@@ -36,6 +36,9 @@ class DecoratorLink: public IBehavior
 {
 public:
     explicit DecoratorLink(BehaviorTree *link, uint32_t id, IBehavior::ptr parent = nullptr);
+    DecoratorLink(const DecoratorLink&) = delete;
+    DecoratorLink&operator=(const DecoratorLink&) = delete;
+
     std::string get_glyph() override;
     bool can_have_children() override;
 

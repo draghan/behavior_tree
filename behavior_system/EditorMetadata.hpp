@@ -39,6 +39,8 @@ class EditorMetadata
 {
 public:
     explicit EditorMetadata(class IBehavior *owner);
+    EditorMetadata(const EditorMetadata&) = delete;
+    void operator=(const EditorMetadata&) = delete;
 
     int x;
     int y;

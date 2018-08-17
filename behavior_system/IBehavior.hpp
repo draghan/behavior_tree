@@ -52,6 +52,8 @@ public:
     using ptr = IBehavior *;
     using id_t = uint32_t;
 
+    const static id_t undefined_id;
+
 #ifndef __arm__
 
     friend class EditorMetadata;
@@ -75,6 +77,8 @@ public:
     ptr get_parent() const;
 
     explicit IBehavior(ptr parent, uint32_t id = 0);
+    IBehavior(const IBehavior&) = delete;
+    void operator=(const IBehavior&) = delete;
     virtual ~IBehavior() = default;
 
     BehaviorState evaluate();

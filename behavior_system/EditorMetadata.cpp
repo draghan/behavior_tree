@@ -37,6 +37,9 @@ EditorMetadata::EditorMetadata(class IBehavior *owner)
           mod{0.0f},
           width{0.0f},
           height{0.0f},
+          metadata{},
+          description{},
+          node_type{},
           owner{owner}
 {
 }

@@ -67,12 +67,12 @@ TEST_CASE("Testing tree interface of BehaviorTree class", "[Tree]")
         BehaviorTree tree;
         tree.add_selector();
         tree.set_at_absolutely();
-        tree.add_child(new BehaviorAction{0, action_false});
+        tree.add_action(action_false);
         tree.add_sequence();
         tree.set_at_absolutely(1);
-        tree.add_child(new BehaviorAction{0, action1});
-        tree.add_child(new BehaviorAction{0, action2});
-        tree.add_child(new BehaviorAction{0, action3});
+        tree.add_action(action1);
+        tree.add_action(action2);
+        tree.add_action(action3);
         tree.set_at_absolutely();
         REQUIRE(tree.get_node_count() == 6);
 
@@ -114,11 +114,23 @@ TEST_CASE("Testing tree interface of BehaviorTree class", "[Tree]")
         tree.add_selector();
         tree.add_sequence();
         tree.set_at_relatively(0);
-        tree.add_condition([]() { return true; });
-        tree.add_condition([]() { return true; });
+        tree.add_condition([]()
+                           {
+                               return true;
+                           });
+        tree.add_condition([]()
+                           {
+                               return true;
+                           });
         tree.set_at_absolutely();
-        tree.add_condition([]() { return true; });
-        tree.add_condition([]() { return true; });
+        tree.add_condition([]()
+                           {
+                               return true;
+                           });
+        tree.add_condition([]()
+                           {
+                               return true;
+                           });
 
         REQUIRE(tree.get_node_count() == 6);
         auto root = tree.get();
@@ -164,10 +176,12 @@ TEST_CASE("Testing tree interface of BehaviorTree class", "[Tree]")
     }
 
 
-
     SECTION("Constructor with root data")
     {
-        BehaviorTree tree{new BehaviorAction{12, []() { return BehaviorState::running; }}};
+        BehaviorTree tree{new BehaviorAction{12, []()
+        {
+            return BehaviorState::running;
+        }}};
 
         REQUIRE(tree.get_node_count() == 1);
 
@@ -193,14 +207,16 @@ TEST_CASE("Testing tree interface of BehaviorTree class", "[Tree]")
     {
         int counter = 0;
         BehaviorTree tree{new BehaviorSequence(10)};
-        tree.add_child(new BehaviorAction(10, [&]() {
-            ++counter;
-            return BehaviorState::success;
-        }));
-        tree.add_child(new BehaviorAction(10, [&]() {
-            ++counter;
-            return BehaviorState::success;
-        }));
+        tree.add_action([&]()
+                        {
+                            ++counter;
+                            return BehaviorState::success;
+                        });
+        tree.add_action([&]()
+                        {
+                            ++counter;
+                            return BehaviorState::success;
+                        });
 
         REQUIRE(tree.get_node_count() == 3);
 
@@ -234,14 +250,16 @@ TEST_CASE("Testing tree interface of BehaviorTree class", "[Tree]")
         int counter_1 = 0;
         int counter_2 = 0;
         BehaviorTree tree_0{new BehaviorSequence(10)};
-        tree_0.add_child(new BehaviorAction(10, [&]() {
-            ++counter_1;
-            return BehaviorState::success;
-        }));
-        tree_0.add_child(new BehaviorAction(10, [&]() {
-            ++counter_2;
-            return BehaviorState::success;
-        }));
+        tree_0.add_action([&]()
+                          {
+                              ++counter_1;
+                              return BehaviorState::success;
+                          });
+        tree_0.add_action([&]()
+                          {
+                              ++counter_2;
+                              return BehaviorState::success;
+                          });
 
         REQUIRE(tree_0.get_node_count() == 3);
 
@@ -328,24 +346,27 @@ TEST_CASE("Testing tree interface of BehaviorTree class", "[Tree]")
         int id = 0;
         int counter = 0;
         BehaviorTree tree{new BehaviorSequence(0)};
-        tree.add_child(new BehaviorSequence(0));
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++counter;
-            id = 2;
-            return BehaviorState::undefined;
-        }));
+        tree.add_sequence();
+        tree.add_action([&]()
+                        {
+                            ++counter;
+                            id = 2;
+                            return BehaviorState::undefined;
+                        });
 
         REQUIRE(tree.set_at_absolutely(0) == true);
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++counter;
-            id = 3;
-            return BehaviorState::undefined;
-        }));
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++counter;
-            id = 4;
-            return BehaviorState::undefined;
-        }));
+        tree.add_action([&]()
+                        {
+                            ++counter;
+                            id = 3;
+                            return BehaviorState::undefined;
+                        });
+        tree.add_action([&]()
+                        {
+                            ++counter;
+                            id = 4;
+                            return BehaviorState::undefined;
+                        });
 
         REQUIRE(tree.set_at_absolutely() == true);
         REQUIRE(dynamic_cast<BehaviorSequence *>(tree.get()) != nullptr);
@@ -386,24 +407,27 @@ TEST_CASE("Testing tree interface of BehaviorTree class", "[Tree]")
         int id = 0;
         int counter = 0;
         BehaviorTree tree{new BehaviorSequence(0)};
-        tree.add_child(new BehaviorSequence(0));
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++counter;
-            id = 2;
-            return BehaviorState::undefined;
-        }));
+        tree.add_sequence();
+        tree.add_action([&]()
+                        {
+                            ++counter;
+                            id = 2;
+                            return BehaviorState::undefined;
+                        });
 
         REQUIRE(tree.set_at_absolutely(0) == true);
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++counter;
-            id = 3;
-            return BehaviorState::undefined;
-        }));
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++counter;
-            id = 4;
-            return BehaviorState::undefined;
-        }));
+        tree.add_action([&]()
+                        {
+                            ++counter;
+                            id = 3;
+                            return BehaviorState::undefined;
+                        });
+        tree.add_action([&]()
+                        {
+                            ++counter;
+                            id = 4;
+                            return BehaviorState::undefined;
+                        });
 
         REQUIRE(tree.set_at_absolutely() == true);
         REQUIRE(dynamic_cast<BehaviorSequence *>(tree.get()) != nullptr);
@@ -451,38 +475,44 @@ TEST_CASE("Testing \'behavior part\' interface of BehaviorTree class", "[Tree]")
     {
         int action_count = 0;
         BehaviorTree tree{new BehaviorSequence(0)};
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++action_count;
-            return BehaviorState::success;
-        }));
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++action_count;
-            return BehaviorState::success;
-        }));
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++action_count;
-            return BehaviorState::success;
-        }));
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++action_count;
-            return BehaviorState::success;
-        }));
+        tree.add_action([&]()
+                        {
+                            ++action_count;
+                            return BehaviorState::success;
+                        });
+        tree.add_action([&]()
+                        {
+                            ++action_count;
+                            return BehaviorState::success;
+                        });
+        tree.add_action([&]()
+                        {
+                            ++action_count;
+                            return BehaviorState::success;
+                        });
+        tree.add_action([&]()
+                        {
+                            ++action_count;
+                            return BehaviorState::success;
+                        });
 
         REQUIRE(tree.get_node_count() == 5);
         REQUIRE(tree.evaluate() == BehaviorState::success);
         REQUIRE(action_count == 4);
         action_count = 0;
 
-        tree.add_child(new BehaviorSequence(0));
+        tree.add_sequence();
         REQUIRE(tree.set_at_relatively(4) == true);
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++action_count;
-            return BehaviorState::success;
-        }));
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++action_count;
-            return BehaviorState::success;
-        }));
+        tree.add_action([&]()
+                        {
+                            ++action_count;
+                            return BehaviorState::success;
+                        });
+        tree.add_action([&]()
+                        {
+                            ++action_count;
+                            return BehaviorState::success;
+                        });
 
         REQUIRE(tree.get_node_count() == 8);
         REQUIRE(tree.set_at_absolutely());
@@ -494,38 +524,44 @@ TEST_CASE("Testing \'behavior part\' interface of BehaviorTree class", "[Tree]")
     {
         int action_count = 0;
         BehaviorTree tree{new BehaviorSequence(0)};
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++action_count;
-            return BehaviorState::success;
-        }));
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++action_count;
-            return BehaviorState::success;
-        }));
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++action_count;
-            return BehaviorState::success;
-        }));
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++action_count;
-            return BehaviorState::success;
-        }));
+        tree.add_action([&]()
+                        {
+                            ++action_count;
+                            return BehaviorState::success;
+                        });
+        tree.add_action([&]()
+                        {
+                            ++action_count;
+                            return BehaviorState::success;
+                        });
+        tree.add_action([&]()
+                        {
+                            ++action_count;
+                            return BehaviorState::success;
+                        });
+        tree.add_action([&]()
+                        {
+                            ++action_count;
+                            return BehaviorState::success;
+                        });
 
         REQUIRE(tree.get_node_count() == 5);
         REQUIRE(tree.evaluate() == BehaviorState::success);
         REQUIRE(action_count == 4);
         action_count = 0;
 
-        tree.add_child(new BehaviorSequence(0));
+        tree.add_sequence();
         REQUIRE(tree.set_at_relatively(4) == true);
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++action_count;
-            return BehaviorState::failure;
-        }));
-        tree.add_child(new BehaviorAction(0, [&]() {
-            ++action_count;
-            return BehaviorState::success;
-        }));
+        tree.add_action([&]()
+                        {
+                            ++action_count;
+                            return BehaviorState::failure;
+                        });
+        tree.add_action([&]()
+                        {
+                            ++action_count;
+                            return BehaviorState::success;
+                        });
 
         REQUIRE(tree.get_node_count() == 8);
         REQUIRE(tree.set_at_absolutely());
@@ -559,14 +595,16 @@ TEST_CASE("Testing factor part of BehaviorTree class", "[Tree]")
         REQUIRE(tree.set_at_absolutely(1) == false);
 
         REQUIRE(tree.set_at_absolutely(0) == true);
-        REQUIRE(tree.add_condition([]() {
-            return true;
-        }));
+        REQUIRE(tree.add_condition([]()
+                                   {
+                                       return true;
+                                   }));
         int action_counter = 0;
-        REQUIRE(tree.add_action([&]() {
-            ++action_counter;
-            return BehaviorState::success;
-        }));
+        REQUIRE(tree.add_action([&]()
+                                {
+                                    ++action_counter;
+                                    return BehaviorState::success;
+                                }));
         REQUIRE(tree.get_node_count() == 4);
 
         REQUIRE(tree.set_at_absolutely(0, 0));

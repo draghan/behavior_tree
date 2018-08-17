@@ -27,10 +27,10 @@
 //
 
 #include "BehaviorTree.hpp"
-#include "../Decorator/DecoratorLink.hpp"
-#include "../Decorator/DecoratorInvert.hpp"
-#include "../Decorator/DecoratorLoop.hpp"
-#include "../Decorator/DecoratorMaxNTries.hpp"
+#include "../decorator/DecoratorInvert.hpp"
+#include "../decorator/DecoratorLink.hpp"
+#include "../decorator/DecoratorLoop.hpp"
+#include "../decorator/DecoratorMaxNTries.hpp"
 
 const BehaviorTree::id_t BehaviorTree::undefined_id{std::numeric_limits<BehaviorTree::id_t>::max()};
 const BehaviorTree::id_t BehaviorTree::id_any{0};
@@ -217,9 +217,19 @@ bool BehaviorTree::add_selector()
     return add_child(new BehaviorSelector(id_any, active));
 }
 
+bool BehaviorTree::add_action(BehaviorAction::action_t action)
+{
+    return add_child(new BehaviorAction(id_any, std::move(action), active));
+}
+
 bool BehaviorTree::add_action(BehaviorAction::action_t &&action)
 {
     return add_child(new BehaviorAction(id_any, std::move(action), active));
+}
+
+bool BehaviorTree::add_condition(BehaviorCondition::predicate_t predicate)
+{
+    return add_child(new BehaviorCondition(id_any, std::move(predicate), active));
 }
 
 bool BehaviorTree::add_condition(BehaviorCondition::predicate_t &&predicate)
@@ -228,11 +238,13 @@ bool BehaviorTree::add_condition(BehaviorCondition::predicate_t &&predicate)
 }
 
 #ifndef __arm__
+
 void BehaviorTree::print(std::ostream &stream)
 {
     bool root_is_lonely{root->get_number_of_children() == 0};
     root->PrintPretty("", root_is_lonely, stream);
 }
+
 #endif
 
 BehaviorState BehaviorTree::evaluate()
