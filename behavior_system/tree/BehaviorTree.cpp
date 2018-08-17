@@ -222,17 +222,7 @@ bool BehaviorTree::add_action(BehaviorAction::action_t action)
     return add_child(new BehaviorAction(id_any, std::move(action), active));
 }
 
-bool BehaviorTree::add_action(BehaviorAction::action_t &&action)
-{
-    return add_child(new BehaviorAction(id_any, std::move(action), active));
-}
-
 bool BehaviorTree::add_condition(BehaviorCondition::predicate_t predicate)
-{
-    return add_child(new BehaviorCondition(id_any, std::move(predicate), active));
-}
-
-bool BehaviorTree::add_condition(BehaviorCondition::predicate_t &&predicate)
 {
     return add_child(new BehaviorCondition(id_any, std::move(predicate), active));
 }

@@ -69,9 +69,7 @@ public:
     bool add_sequence();
     bool add_selector();
     bool add_action(BehaviorAction::action_t action);
-    bool add_action(BehaviorAction::action_t &&action);
     bool add_condition(BehaviorCondition::predicate_t predicate);
-    bool add_condition(BehaviorCondition::predicate_t &&predicate);
     bool add_link(BehaviorTree *link);
     bool add_invert();
     bool add_loop(uint32_t times);
