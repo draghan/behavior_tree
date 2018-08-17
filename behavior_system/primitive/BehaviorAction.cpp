@@ -35,7 +35,7 @@ bool BehaviorAction::can_have_children()
 
 BehaviorAction::BehaviorAction(uint32_t id, BehaviorAction::action_t action, IBehavior::ptr parent):
         IBehavior(parent, id),
-        action{std::move(action)}
+        action{action}
 {
 }
 

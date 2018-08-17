@@ -47,7 +47,7 @@ public:
     BehaviorTree();
     BehaviorTree(const BehaviorTree &) = delete;
     BehaviorTree(BehaviorTree &&bt) noexcept;
-    ~BehaviorTree();
+    virtual ~BehaviorTree();
     BehaviorTree &operator=(const BehaviorTree &bt) = delete;
     BehaviorTree &operator=(BehaviorTree &&bt) noexcept;
     BehaviorTree &operator+=(BehaviorTree &&bt) noexcept;

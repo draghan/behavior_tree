@@ -40,7 +40,7 @@ std::string BehaviorCondition::get_glyph()
 
 BehaviorCondition::BehaviorCondition(uint32_t id, BehaviorCondition::predicate_t predicate, IBehavior::ptr parent)
         : IBehavior(parent, id),
-          predicate{std::move(predicate)}
+          predicate{predicate}
 {
 }
 
