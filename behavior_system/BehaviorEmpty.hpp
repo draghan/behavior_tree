@@ -28,21 +28,20 @@
 
 #pragma once
 
-#include <cstdint>
 #include <vector>
 #include <string>
 
 
 #include "IBehavior.hpp"
 
-class BehaviorEmpty :public IBehavior
+class BehaviorEmpty: public IBehavior
 {
 public:
     ~BehaviorEmpty() override = default;
     explicit BehaviorEmpty(uint32_t id, IBehavior::ptr parent = nullptr);
 
-    bool can_have_children() override;
-    std::string get_glyph() override;
+    bool can_have_children() const override;
+    std::string get_glyph() const override;
 
 protected:
     BehaviorState internal_evaluate(id_t id_child) override;

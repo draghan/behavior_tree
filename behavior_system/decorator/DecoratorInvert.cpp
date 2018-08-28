@@ -33,12 +33,12 @@ DecoratorInvert::DecoratorInvert(uint32_t id, IBehavior::ptr parent)
 {
 }
 
-std::string DecoratorInvert::get_glyph()
+std::string DecoratorInvert::get_glyph() const
 {
     return "< d > !";
 }
 
-bool DecoratorInvert::can_have_children()
+bool DecoratorInvert::can_have_children() const
 {
     return true;
 }

@@ -35,8 +35,8 @@ class DecoratorMaxNTries: public IBehavior
 {
 public:
     explicit DecoratorMaxNTries(uint32_t repeat, uint32_t id, IBehavior::ptr parent = nullptr);
-    std::string get_glyph() override;
-    bool can_have_children() override;
+    std::string get_glyph() const override;
+    bool can_have_children() const override;
 
 protected:
     BehaviorState internal_evaluate(id_t id) override;

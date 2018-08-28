@@ -39,8 +39,8 @@ public:
     DecoratorLink(const DecoratorLink&) = delete;
     DecoratorLink&operator=(const DecoratorLink&) = delete;
 
-    std::string get_glyph() override;
-    bool can_have_children() override;
+    std::string get_glyph() const override;
+    bool can_have_children() const override;
 
 protected:
     BehaviorState internal_evaluate(id_t id) override;

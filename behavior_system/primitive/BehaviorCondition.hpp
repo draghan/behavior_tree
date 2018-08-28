@@ -40,8 +40,8 @@ public:
     BehaviorCondition(uint32_t id, predicate_t predicate, IBehavior::ptr parent = nullptr);
     ~BehaviorCondition() override = default;
 
-    bool can_have_children() override;
-    std::string get_glyph() override;
+    bool can_have_children() const override;
+    std::string get_glyph() const override;
 
 protected:
     predicate_t predicate;

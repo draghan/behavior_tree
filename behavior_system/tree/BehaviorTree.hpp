@@ -41,7 +41,7 @@ class BehaviorTree
 {
 public:
     using id_t = uint32_t;
-    const static id_t undefined_id;
+    static const id_t undefined_id;
 
     explicit BehaviorTree(IBehavior::ptr root);
     BehaviorTree();
@@ -51,6 +51,8 @@ public:
     BehaviorTree &operator=(const BehaviorTree &bt) = delete;
     BehaviorTree &operator=(BehaviorTree &&bt) noexcept;
     BehaviorTree &operator+=(BehaviorTree &&bt) noexcept;
+
+    void clear();
 
 
     template <typename... Args>
@@ -72,15 +74,17 @@ public:
     bool add_condition(BehaviorCondition::predicate_t predicate);
     bool add_link(BehaviorTree *link);
     bool add_invert();
-    bool add_loop(uint32_t times);
-    bool add_max_N_tries(uint32_t tries);
+    bool add_loop(uint32_t loop_counter);
+    bool add_max_N_tries(uint32_t attempts);
 
     BehaviorState evaluate();
 
 #ifndef __arm__
+
     void print(std::ostream &stream);
+
 #endif
-    void clear();
+
 private:
     static const id_t id_any;
     std::vector<IBehavior::ptr> nodes;

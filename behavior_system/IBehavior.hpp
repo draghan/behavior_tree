@@ -28,15 +28,12 @@
 
 #pragma once
 
-#include <cstdint>
 #include <string>
 #include <vector>
 
 #ifndef __arm__
-#include <iostream>
+#include <ostream>
 #endif
-
-#include "EditorMetadata.hpp"
 
 enum class BehaviorState: uint8_t
 {
@@ -56,12 +53,13 @@ public:
 
 #ifndef __arm__
 
-    friend class EditorMetadata;
+    // Decided to disable printing to the streams on ARM processors
+    // in order to keep some bytes of compiled result file.
+    // With stream library included, result files were unacceptable
+    // oversized for Cortex M.
 
-    EditorMetadata draw_helper;
-
-    void PrintPretty(std::string indent, bool last, std::ostream &stream);
-    void print(std::ostream &stream);
+    void print_family(std::string indent, bool last, std::ostream &stream);
+    void introduce_yourself(std::ostream &stream);
 
 #endif
 
@@ -86,8 +84,8 @@ public:
 
     bool operator==(const IBehavior &);
 
-    virtual std::string get_glyph();
-    virtual bool can_have_children() = 0;
+    virtual std::string get_glyph() const;
+    virtual bool can_have_children() const = 0;
 
 protected:
     std::vector<ptr> children;

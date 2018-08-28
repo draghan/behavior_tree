@@ -34,12 +34,12 @@ BehaviorEmpty::BehaviorEmpty(uint32_t id, IBehavior::ptr parent)
 {
 }
 
-bool BehaviorEmpty::can_have_children()
+bool BehaviorEmpty::can_have_children() const
 {
     return true;
 }
 
-std::string BehaviorEmpty::get_glyph()
+std::string BehaviorEmpty::get_glyph() const
 {
     return "*";
 }

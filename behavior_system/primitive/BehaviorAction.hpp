@@ -38,8 +38,8 @@ public:
     using action_t = std::function<BehaviorState()>;
     BehaviorAction(uint32_t id, action_t action, IBehavior::ptr parent = nullptr);
 
-    bool can_have_children() override;
-    std::string get_glyph() override;
+    bool can_have_children() const override;
+    std::string get_glyph() const override;
 
 protected:
     BehaviorState internal_evaluate(id_t id) override;

@@ -28,12 +28,12 @@
 
 #include "DecoratorLink.hpp"
 
-std::string DecoratorLink::get_glyph()
+std::string DecoratorLink::get_glyph() const
 {
     return "< d > @";
 }
 
-bool DecoratorLink::can_have_children()
+bool DecoratorLink::can_have_children() const
 {
     return false;
 }

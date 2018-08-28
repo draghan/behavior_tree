@@ -30,7 +30,7 @@
 
 #include "BehaviorAction.hpp"
 
-bool BehaviorAction::can_have_children()
+bool BehaviorAction::can_have_children() const
 {
     return false;
 }
@@ -41,7 +41,7 @@ BehaviorAction::BehaviorAction(uint32_t id, BehaviorAction::action_t action, IBe
 {
 }
 
-std::string BehaviorAction::get_glyph()
+std::string BehaviorAction::get_glyph() const
 {
     return "[   ]";
 }

@@ -28,7 +28,7 @@
 
 #include "BehaviorSelector.hpp"
 
-bool BehaviorSelector::can_have_children()
+bool BehaviorSelector::can_have_children() const
 {
     return true;
 }
@@ -38,7 +38,7 @@ BehaviorSelector::BehaviorSelector(uint32_t id, IBehavior::ptr parent)
 {
 }
 
-std::string BehaviorSelector::get_glyph()
+std::string BehaviorSelector::get_glyph() const
 {
     return "[ ? ]";
 }

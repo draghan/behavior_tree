@@ -36,12 +36,12 @@ DecoratorMaxNTries::DecoratorMaxNTries(uint32_t repeat, uint32_t id, IBehavior::
 {
 }
 
-std::string DecoratorMaxNTries::get_glyph()
+std::string DecoratorMaxNTries::get_glyph() const
 {
     return "< d > <=N";
 }
 
-bool DecoratorMaxNTries::can_have_children()
+bool DecoratorMaxNTries::can_have_children() const
 {
     return true;
 }

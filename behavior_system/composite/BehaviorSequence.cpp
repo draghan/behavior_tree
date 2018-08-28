@@ -28,7 +28,7 @@
 
 #include "BehaviorSequence.hpp"
 
-bool BehaviorSequence::can_have_children()
+bool BehaviorSequence::can_have_children() const
 {
     return true;
 }
@@ -38,7 +38,7 @@ BehaviorSequence::BehaviorSequence(uint32_t id, IBehavior::ptr parent)
 {
 }
 
-std::string BehaviorSequence::get_glyph()
+std::string BehaviorSequence::get_glyph() const
 {
     return "[->]";
 }

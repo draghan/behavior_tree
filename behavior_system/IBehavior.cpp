@@ -33,7 +33,7 @@
 
 const IBehavior::id_t IBehavior::undefined_id{std::numeric_limits<IBehavior::id_t>::max()};
 
-void IBehavior::PrintPretty(std::string indent, bool last, std::ostream &stream) // todo: clean print functions
+void IBehavior::print_family(std::string indent, bool last, std::ostream &stream)
 {
     stream << indent;
     if(last)
@@ -43,17 +43,18 @@ void IBehavior::PrintPretty(std::string indent, bool last, std::ostream &stream)
     }
     else
     {
-        stream << ("|-");
+        stream << "|-";
         indent += "| ";
     }
-    print(stream);
+
+    introduce_yourself(stream);
     for(size_t i = 0; i < children.size(); i++)
     {
-        children[i]->PrintPretty(indent, i == children.size() - 1, stream);
+        children[i]->print_family(indent, i == children.size() - 1, stream);
     }
 }
 
-void IBehavior::print(std::ostream &stream)
+void IBehavior::introduce_yourself(std::ostream &stream)
 {
     stream << get_glyph() << "\tid = " << id << '\n';
 }
@@ -110,11 +111,7 @@ IBehavior::ptr IBehavior::get_parent() const
 }
 
 IBehavior::IBehavior(IBehavior::ptr parent, uint32_t id)
-        :
-#ifndef __arm__
-          draw_helper{this},
-#endif
-          children{},
+        : children{},
           parent{parent},
           id{id},
           status{BehaviorState::undefined},
@@ -146,7 +143,7 @@ bool IBehavior::operator==(const IBehavior &)
     return false;
 }
 
-std::string IBehavior::get_glyph()
+std::string IBehavior::get_glyph() const
 {
     return "|IB|";
 }

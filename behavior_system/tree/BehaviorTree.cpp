@@ -196,14 +196,14 @@ bool BehaviorTree::add_invert()
     return add_child(new DecoratorInvert(id_any, active));
 }
 
-bool BehaviorTree::add_loop(uint32_t times)
+bool BehaviorTree::add_loop(uint32_t loop_counter)
 {
-    return add_child(new DecoratorLoop(times, id_any, active));
+    return add_child(new DecoratorLoop(loop_counter, id_any, active));
 }
 
-bool BehaviorTree::add_max_N_tries(uint32_t tries)
+bool BehaviorTree::add_max_N_tries(uint32_t attempts)
 {
-    return add_child(new DecoratorMaxNTries(tries, id_any, active));
+    return add_child(new DecoratorMaxNTries(attempts, id_any, active));
 }
 
 
@@ -232,7 +232,7 @@ bool BehaviorTree::add_condition(BehaviorCondition::predicate_t predicate)
 void BehaviorTree::print(std::ostream &stream)
 {
     bool root_is_lonely{root->get_number_of_children() == 0};
-    root->PrintPretty("", root_is_lonely, stream);
+    root->print_family("", root_is_lonely, stream);
 }
 
 #endif

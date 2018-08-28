@@ -30,12 +30,12 @@
 
 #include "BehaviorCondition.hpp"
 
-bool BehaviorCondition::can_have_children()
+bool BehaviorCondition::can_have_children() const
 {
     return false;
 }
 
-std::string BehaviorCondition::get_glyph()
+std::string BehaviorCondition::get_glyph() const
 {
     return "(   )";
 }

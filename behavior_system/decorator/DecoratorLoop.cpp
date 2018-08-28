@@ -36,12 +36,12 @@ DecoratorLoop::DecoratorLoop(uint32_t repeat, uint32_t id, IBehavior::ptr parent
 {
 }
 
-std::string DecoratorLoop::get_glyph()
+std::string DecoratorLoop::get_glyph() const
 {
     return "< d > ->N";
 }
 
-bool DecoratorLoop::can_have_children()
+bool DecoratorLoop::can_have_children() const
 {
     return true;
 }
